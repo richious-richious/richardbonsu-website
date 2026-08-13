@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Richard Bonsu — Platform Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10141B;
+    --panel: #171D27;
+    --panel-2: #1C2330;
+    --border: #262E3B;
+    --text: #EAF0F3;
+    --text-dim: #8D97A8;
+    --text-faint: #5B6478;
+    --ok: #4FA8E8;
+    --ok-dim: #2A5A80;
+    --build: #E3A857;
+    --radius: 3px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    top:-20%; left:-10%;
+    width:70vw; height:70vw;
+    background:radial-gradient(circle, rgba(79,168,232,0.16) 0%, rgba(79,168,232,0) 60%);
+    filter:blur(10px);
+    pointer-events:none;
+    z-index:0;
+    animation:drift1 18s ease-in-out infinite alternate;
+  }
+  body::after{
+    content:"";
+    position:fixed;
+    bottom:-25%; right:-15%;
+    width:60vw; height:60vw;
+    background:radial-gradient(circle, rgba(90,169,230,0.13) 0%, rgba(90,169,230,0) 60%);
+    filter:blur(10px);
+    pointer-events:none;
+    z-index:0;
+    animation:drift2 22s ease-in-out infinite alternate;
+  }
+  @keyframes drift1{
+    0%{ transform:translate(0,0) scale(1); }
+    100%{ transform:translate(4%, 6%) scale(1.08); }
+  }
+  @keyframes drift2{
+    0%{ transform:translate(0,0) scale(1); }
+    100%{ transform:translate(-5%, -4%) scale(1.1); }
+  }
+  header.site, .hero, section, footer{ position:relative; z-index:1; }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  a{ color:inherit; text-decoration:none; }
+
+  .wrap{
+    max-width:1040px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- NAV ---------- */
+  header.site{
+    position:sticky; top:0; z-index:50;
+    background:rgba(16,20,27,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 0;
+  }
+  .brand{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:600;
+    font-size:14px;
+    letter-spacing:0.06em;
+  }
+  .brand span{ color:var(--ok); text-shadow:0 0 12px rgba(79,168,232,0.6); }
+  .nav-links{
+    display:flex; align-items:center; gap:28px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    color:var(--text-dim);
+  }
+  .nav-links a{ transition:color .15s ease; }
+  .nav-links a:hover, .nav-links a:focus-visible{ color:var(--ok); outline:none; }
+  .status-pill{
+    display:flex; align-items:center; gap:7px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; letter-spacing:0.05em;
+    color:var(--ok);
+    border:1px solid var(--ok-dim);
+    background:linear-gradient(135deg, rgba(79,168,232,0.1), rgba(79,168,232,0.03));
+    padding:6px 11px;
+    border-radius:20px;
+    box-shadow:0 0 16px -4px rgba(79,168,232,0.35);
+  }
+  .dot{
+    width:6px; height:6px; border-radius:50%;
+    background:var(--ok);
+    box-shadow:0 0 0 0 rgba(79,168,232,0.5);
+    animation:pulse 2.2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(79,168,232,0.45); }
+    70%{ box-shadow:0 0 0 6px rgba(79,168,232,0); }
+    100%{ box-shadow:0 0 0 0 rgba(79,168,232,0); }
+  }
+  .nav-toggle{ display:none; }
+
+  /* ---------- HERO / PIPELINE ---------- */
+  .hero{
+    padding:76px 0 64px;
+    border-bottom:1px solid var(--border);
+  }
+  .pipeline{
+    display:flex; align-items:center;
+    margin-bottom:44px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    color:var(--text-faint);
+  }
+  .stage{
+    display:flex; align-items:center; gap:8px;
+    white-space:nowrap;
+    transition:color .3s ease;
+  }
+  .stage .node{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    transition:background .3s ease, border-color .3s ease, box-shadow .3s ease;
+  }
+  .stage.active{ color:var(--text); }
+  .stage.active .node{
+    background:var(--ok);
+    border-color:var(--ok);
+    box-shadow:0 0 8px rgba(79,168,232,0.55);
+  }
+  .stage.building .node{
+    background:var(--build);
+    border-color:var(--build);
+  }
+  .track{
+    flex:1;
+    height:1px;
+    background:var(--border);
+    margin:0 12px;
+    position:relative;
+    overflow:hidden;
+  }
+  .track .fill{
+    position:absolute; left:0; top:0; bottom:0;
+    width:0%;
+    background:var(--ok);
+    transition:width .5s ease;
+  }
+
+  .hero h1{
+    font-family:'IBM Plex Mono', monospace;
+    font-weight:700;
+    font-size:clamp(38px, 7vw, 64px);
+    letter-spacing:-0.01em;
+    line-height:1.05;
+    opacity:0;
+    transform:translateY(8px);
+    transition:opacity .5s ease, transform .5s ease;
+    background:linear-gradient(100deg, #ffffff 0%, #ffffff 40%, var(--ok) 75%, #8ED0FF 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 0 22px rgba(79,168,232,0.25));
+  }
+  .hero h1.in{ opacity:1; transform:translateY(0); }
+
+  .hero .role{
+    margin-top:16px;
+    font-size:17px;
+    color:var(--text-dim);
+    max-width:560px;
+  }
+
+  .meta-row{
+    display:flex; flex-wrap:wrap; gap:10px 28px;
+    margin-top:32px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-faint);
+  }
+  .meta-row span b{ color:var(--text-dim); font-weight:500; }
+
+  .cta-row{
+    display:flex; flex-wrap:wrap; gap:14px;
+    margin-top:36px;
+  }
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    letter-spacing:0.03em;
+    padding:12px 20px;
+    border-radius:var(--radius);
+    border:1px solid var(--border);
+    transition:border-color .15s ease, background .15s ease, transform .15s ease, box-shadow .25s ease;
+    display:inline-block;
+    position:relative;
+    overflow:hidden;
+  }
+  .btn.primary{
+    background:linear-gradient(135deg, #7EC8F5 0%, var(--ok) 55%, #2E7FBF 100%);
+    color:#0B1420;
+    border-color:var(--ok);
+    font-weight:600;
+    box-shadow:0 4px 20px rgba(79,168,232,0.25);
+  }
+  .btn.primary::after{
+    content:"";
+    position:absolute; top:0; left:-120%;
+    width:60%; height:100%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,0.55), transparent);
+    transform:skewX(-20deg);
+    transition:left .55s ease;
+  }
+  .btn.primary:hover::after{ left:140%; }
+  .btn.primary:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(79,168,232,0.4); }
+  .btn.secondary{ background:rgba(255,255,255,0.02); backdrop-filter:blur(6px); }
+  .btn.secondary:hover{ border-color:var(--text-dim); background:rgba(255,255,255,0.04); transform:translateY(-1px); }
+
+  /* ---------- ICONS ---------- */
+  .icon{
+    width:17px; height:17px;
+    color:var(--ok);
+    flex-shrink:0;
+    filter:drop-shadow(0 0 5px rgba(79,168,232,0.35));
+  }
+  .icon-lg{ width:22px; height:22px; }
+
+  /* ---------- ARCHITECTURE DIAGRAM ---------- */
+  .diagram-caption{
+    color:var(--text-dim);
+    font-size:14.5px;
+    max-width:620px;
+    margin-bottom:28px;
+  }
+  .diagram-frame{
+    background:linear-gradient(160deg, rgba(28,35,48,0.9), rgba(23,29,39,0.75));
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:20px;
+    overflow-x:auto;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  .diagram-frame svg{
+    display:block;
+    width:100%;
+    min-width:640px;
+    height:auto;
+  }
+
+  /* ---------- SECTION SHELL ---------- */
+  section{ padding:64px 0; border-bottom:1px solid var(--border); }
+  .section-head{
+    display:flex; align-items:baseline; gap:14px;
+    margin-bottom:32px;
+  }
+  .section-head .idx{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ok);
+    font-size:13px;
+  }
+  .section-head h2{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--text-dim);
+  }
+
+  /* ---------- ABOUT ---------- */
+  .manifest{
+    background:linear-gradient(160deg, rgba(28,35,48,0.9), rgba(23,29,39,0.75));
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:8px;
+    overflow:hidden;
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+    transition:border-color .25s ease, box-shadow .25s ease;
+  }
+  .manifest:hover{
+    border-color:var(--ok-dim);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.5), 0 0 30px -8px rgba(79,168,232,0.25), inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  .manifest-head{
+    padding:14px 22px;
+    border-bottom:1px solid var(--border);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-faint);
+    display:flex; gap:18px;
+  }
+  .manifest-head b{ color:var(--ok); font-weight:500; }
+  .manifest-body{ padding:26px 28px; }
+  .manifest-body p{ color:var(--text-dim); font-size:15.5px; max-width:640px; }
+
+  /* ---------- EXPERIENCE ---------- */
+  .log-entry{
+    display:grid;
+    grid-template-columns:110px 1fr;
+    gap:24px;
+    padding:26px 24px;
+    margin:0 -24px;
+    border-top:1px solid var(--border);
+    border-radius:8px;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .log-entry:hover{ background:rgba(79,168,232,0.035); transform:translateX(2px); }
+  .log-entry:first-child{ border-top:none; padding-top:0; margin-top:0; }
+  .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-faint);
+  }
+  .tag .head{
+    display:inline-block;
+    background:rgba(79,168,232,0.1);
+    color:var(--ok);
+    border:1px solid var(--ok-dim);
+    padding:2px 7px;
+    border-radius:3px;
+    font-size:10.5px;
+    margin-bottom:8px;
+  }
+  .log-role{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:16px;
+    font-weight:600;
+    margin-bottom:2px;
+  }
+  .log-sub{
+    color:var(--text-dim);
+    font-size:13.5px;
+    margin-bottom:14px;
+  }
+  .log-sub .sep{ color:var(--text-faint); margin:0 6px; }
+  .log-entry ul{ list-style:none; }
+  .log-entry li{
+    position:relative;
+    padding-left:18px;
+    margin-bottom:9px;
+    color:var(--text-dim);
+    font-size:14.5px;
+  }
+  .log-entry li::before{
+    content:"›";
+    position:absolute; left:0; top:0;
+    color:var(--ok);
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  /* ---------- STACK ---------- */
+  .stack-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:1px;
+    background:var(--border);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .stack-group{
+    background:linear-gradient(160deg, rgba(28,35,48,0.85), rgba(23,29,39,0.6));
+    padding:22px 24px;
+    transition:background .2s ease, box-shadow .2s ease;
+  }
+  .stack-group:hover{
+    background:linear-gradient(160deg, rgba(32,42,56,0.95), rgba(23,29,39,0.7));
+    box-shadow:inset 0 0 0 1px rgba(79,168,232,0.15);
+  }
+  .stack-group h3{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:14px;
+    display:flex; align-items:center; gap:9px;
+  }
+  .tags{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tags span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    color:var(--text);
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    padding:6px 10px;
+    border-radius:3px;
+    transition:border-color .15s ease, color .15s ease, box-shadow .15s ease, transform .15s ease;
+  }
+  .tags span:hover{
+    border-color:var(--ok);
+    color:var(--ok);
+    box-shadow:0 0 12px -2px rgba(79,168,232,0.4);
+    transform:translateY(-1px);
+  }
+
+  /* ---------- EDUCATION ---------- */
+  .edu-item{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:16px 0;
+    border-top:1px solid var(--border);
+    gap:16px; flex-wrap:wrap;
+  }
+  .edu-item:first-child{ border-top:none; }
+  .edu-item .school{ font-weight:600; font-size:15px; display:flex; align-items:center; gap:9px; }
+  .edu-item .deg{ color:var(--text-dim); font-size:13.5px; margin-top:2px; }
+  .edu-item .loc{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--text-faint);
+    white-space:nowrap;
+  }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{ padding:64px 0 48px; }
+  .terminal{
+    background:linear-gradient(160deg, rgba(28,35,48,0.9), rgba(23,29,39,0.75));
+    backdrop-filter:blur(10px);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:28px 30px;
+    box-shadow:0 20px 60px -25px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+  }
+  .terminal .prompt{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px;
+    color:var(--ok);
+    margin-bottom:18px;
+  }
+  .terminal .prompt span{ color:var(--text-faint); }
+  .contact-links{ display:flex; flex-wrap:wrap; gap:12px; margin-bottom:18px; }
+  .contact-links a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    padding:10px 16px;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    transition:border-color .15s ease, box-shadow .2s ease, transform .15s ease;
+  }
+  .contact-links a:hover{ border-color:var(--ok); color:var(--ok); box-shadow:0 0 16px -3px rgba(79,168,232,0.45); transform:translateY(-1px); }
+  .foot-note{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--text-faint);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:720px){
+    .wrap{ padding:0 20px; }
+    .nav-links{ display:none; }
+
+    .hero{ padding:28px 0 40px; }
+
+    .pipeline{ font-size:9.5px; margin-bottom:22px; }
+    .pipeline .track{ margin:0 6px; }
+    .stage span.label{ display:none; }
+    .stage .node{ width:7px; height:7px; }
+
+    .hero h1{ font-size:clamp(32px, 11vw, 44px); }
+    .hero .role{ font-size:14.5px; margin-top:10px; max-width:100%; }
+
+    .meta-row{ gap:6px 16px; margin-top:18px; font-size:10.5px; }
+
+    .cta-row{ margin-top:22px; gap:10px; flex-direction:column; }
+    .btn{ text-align:center; width:100%; }
+
+    .stack-grid{ grid-template-columns:1fr; }
+    .log-entry{ grid-template-columns:1fr; gap:10px; padding:22px 20px; margin:0 -20px; }
+
+    section{ padding:48px 0; }
+    .diagram-frame{ padding:14px; }
+    .diagram-frame svg{ min-width:820px; }
+    .diagram-caption{ font-size:13.5px; }
+  }
+
+  @media (max-width:380px){
+    .hero{ padding:22px 0 32px; }
+    .hero .role{ font-size:13.5px; }
+    .meta-row span:nth-child(3){ display:none; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="icon-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 17a4 4 0 1 1 .5-7.97A5 5 0 0 1 16 8.5c.17 0 .34.01.5.03A3.5 3.5 0 0 1 17 17H6Z"/>
+  </symbol>
+  <symbol id="icon-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 Z"/>
+    <path d="M4 7.5 12 12 20 7.5"/>
+    <path d="M12 12 12 21"/>
+  </symbol>
+  <symbol id="icon-flow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="5" cy="12" r="2"/>
+    <circle cx="12" cy="6" r="2"/>
+    <circle cx="12" cy="18" r="2"/>
+    <circle cx="19" cy="12" r="2"/>
+    <path d="M6.8 11 10.2 7.3 M6.8 13 10.2 16.7 M13.8 7.3 17.2 11 M13.8 16.7 17.2 13"/>
+  </symbol>
+  <symbol id="icon-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12h4l2-6 3 12 2-9 2 3h5"/>
+  </symbol>
+  <symbol id="icon-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+    <path d="M12 2 13.8 9.2 21 11 13.8 12.8 12 20 10.2 12.8 3 11 10.2 9.2 Z"/>
+  </symbol>
+  <symbol id="icon-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="16" rx="2"/>
+    <path d="M7 9 11 12.5 7 16"/>
+    <path d="M13 16 17 16"/>
+  </symbol>
+  <symbol id="icon-cap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 4 2 9l10 5 10-5Z"/>
+    <path d="M6 11.5v4c0 1.4 2.7 3 6 3s6-1.6 6-3v-4"/>
+    <path d="M22 9v6"/>
+  </symbol>
+  <symbol id="icon-badge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 19 6v6c0 4.5-3 7-7 9-4-2-7-4.5-7-9V6Z"/>
+    <path d="M9 12l2 2 4-4.5"/>
+  </symbol>
+</svg>
+
+<header class="site">
+  <div class="wrap">
+    <nav>
+      <div class="brand">RICHARD<span>.</span>BONSU</div>
+      <div class="nav-links">
+        <a href="#about">about</a>
+        <a href="#architecture">architecture</a>
+        <a href="#experience">experience</a>
+        <a href="#stack">stack</a>
+        <a href="#education">education</a>
+        <a href="#contact">contact</a>
+      </div>
+      <div class="status-pill"><span class="dot"></span>open to work</div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero wrap" style="border-bottom:1px solid var(--border);">
+  <div class="pipeline" id="pipeline">
+    <div class="stage" data-stage="0"><span class="node"></span><span class="label">BUILD</span></div>
+    <div class="track"><div class="fill" id="fill-1"></div></div>
+    <div class="stage" data-stage="1"><span class="node"></span><span class="label">TEST</span></div>
+    <div class="track"><div class="fill" id="fill-2"></div></div>
+    <div class="stage" data-stage="2"><span class="node"></span><span class="label">DEPLOY</span></div>
+    <div class="track"><div class="fill" id="fill-3"></div></div>
+    <div class="stage" data-stage="3"><span class="node"></span><span class="label">LIVE</span></div>
+  </div>
+
+  <h1 id="hero-name">Richard Bonsu</h1>
+  <p class="role">Platform Engineer — AWS · Kubernetes · Terraform · CI/CD · AI-Agentic Workflows</p>
+
+  <div class="meta-row">
+    <span><b>location</b> — Chicago, IL</span>
+    <span><b>availability</b> — on-site · hybrid · remote</span>
+    <span><b>current</b> — Innovid, since Nov 2022</span>
+  </div>
+
+  <div class="cta-row">
+    <a class="btn primary" href="https://www.linkedin.com/in/richardbonsu" target="_blank" rel="noopener">View LinkedIn →</a>
+    <a class="btn secondary" href="#contact">Get in touch</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head"><span class="idx mono">01</span><h2>About</h2></div>
+    <div class="manifest">
+      <div class="manifest-head">
+        <span><b>service:</b> richard-bonsu</span>
+        <span><b>role:</b> platform-engineer</span>
+        <span><b>status:</b> operational</span>
+      </div>
+      <div class="manifest-body">
+        <p>
+          Platform engineer with ~6 years running production infrastructure — from Hyatt's enterprise AWS
+          environment to Innovid's ~10-service EKS platform. Deep in AWS, Kubernetes, Terraform, and GitOps,
+          delivering CI/CD and observability that developers run themselves. Builds and runs agentic workflows
+          (Claude Code, custom skills, Jira MCP), PR-gated against production infrastructure across 30 repos.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="architecture">
+  <div class="wrap">
+    <div class="section-head"><span class="idx mono">02</span><h2>Platform Architecture</h2></div>
+    <p class="diagram-caption">How a change gets from a pull request to running in production — the platform I built and run at Innovid.</p>
+
+    <div class="diagram-frame">
+      <svg viewBox="0 0 1100 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagTitle diagDesc">
+        <title id="diagTitle">Platform architecture diagram</title>
+        <desc id="diagDesc">Pull requests reviewed by an AI agent, gating Terraform modules that provision dev, staging, and prod EKS clusters. Each cluster runs ArgoCD, an EFK logging stack with S3 archival, and Prometheus alerting. A read-only Claude Code skill reads the EFK stack for diagnostics.</desc>
+        <style>
+          .dbox{ fill:var(--panel-2); stroke:var(--border); stroke-width:1.5; }
+          .dbox-accent{ fill:var(--panel-2); stroke:var(--ok); stroke-width:1.5; }
+          .dlabel{ font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:600; fill:var(--text); }
+          .dsub{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; fill:var(--text-faint); }
+          .dtag{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; fill:var(--ok); letter-spacing:0.06em; }
+          .dline{ stroke:var(--border); stroke-width:1.5; fill:none; }
+          .dline-accent{ stroke:var(--ok); stroke-width:1.5; fill:none; stroke-dasharray:4 4; }
+        </style>
+
+        <!-- Row 0: GitHub repos -> PR review agent -->
+        <rect class="dbox" x="40" y="24" width="220" height="64" rx="6"/>
+        <text class="dlabel" x="60" y="52">GitHub — 30 repos</text>
+        <text class="dsub" x="60" y="70">pull requests opened</text>
+
+        <path class="dline" d="M260,56 H420"/>
+        <polygon points="420,56 410,51 410,61" fill="var(--border)"/>
+
+        <rect class="dbox-accent" x="420" y="24" width="280" height="64" rx="6"/>
+        <text class="dtag" x="440" y="42">CLAUDE CODE + JIRA MCP</text>
+        <text class="dlabel" x="440" y="60">PR-review agent</text>
+        <text class="dsub" x="440" y="76">flags gaps &amp; exposed secrets pre-merge</text>
+
+        <path class="dline" d="M560,88 V130"/>
+        <polygon points="560,130 555,120 565,120" fill="var(--border)"/>
+
+        <!-- Row 1: Terraform modules -->
+        <rect class="dbox" x="400" y="130" width="320" height="64" rx="6"/>
+        <text class="dtag" x="420" y="150">TERRAFORM</text>
+        <text class="dlabel" x="420" y="168">Reusable modules · per-env tfvars</text>
+        <text class="dsub" x="420" y="184">rewritten to remove config drift</text>
+
+        <!-- fan-out lines to 3 clusters -->
+        <path class="dline" d="M480,194 V230 H180 V262"/>
+        <path class="dline" d="M560,194 V262"/>
+        <path class="dline" d="M640,194 V230 H940 V262"/>
+        <polygon points="180,262 175,252 185,252" fill="var(--border)"/>
+        <polygon points="560,262 555,252 565,252" fill="var(--border)"/>
+        <polygon points="940,262 935,252 945,252" fill="var(--border)"/>
+
+        <!-- Row 2: three clusters -->
+        <rect class="dbox" x="70" y="262" width="220" height="58" rx="6"/>
+        <text class="dlabel" x="90" y="288">EKS — dev</text>
+        <text class="dsub" x="90" y="306">validation-first</text>
+
+        <rect class="dbox" x="450" y="262" width="220" height="58" rx="6"/>
+        <text class="dlabel" x="470" y="288">EKS — staging</text>
+        <text class="dsub" x="470" y="306">pre-prod parity</text>
+
+        <rect class="dbox-accent" x="830" y="262" width="220" height="58" rx="6"/>
+        <text class="dtag" x="850" y="280">LIVE</text>
+        <text class="dlabel" x="850" y="298">EKS — prod</text>
+        <text class="dsub" x="850" y="314">~10 services</text>
+
+        <!-- converge into platform layer -->
+        <path class="dline" d="M180,320 V352 H550 V368"/>
+        <path class="dline" d="M560,320 V368"/>
+        <path class="dline" d="M940,320 V352 H570 V368"/>
+        <polygon points="560,368 555,358 565,358" fill="var(--border)"/>
+
+        <!-- Row 3: platform layer -->
+        <rect class="dbox" x="110" y="368" width="240" height="70" rx="6"/>
+        <text class="dlabel" x="130" y="396">ArgoCD</text>
+        <text class="dsub" x="130" y="414">auto-sync + self-heal deploys</text>
+
+        <rect class="dbox" x="430" y="368" width="240" height="70" rx="6"/>
+        <text class="dlabel" x="450" y="396">EFK + S3</text>
+        <text class="dsub" x="450" y="414">centralized logs, archived</text>
+
+        <rect class="dbox" x="750" y="368" width="240" height="70" rx="6"/>
+        <text class="dlabel" x="770" y="396">Prometheus</text>
+        <text class="dsub" x="770" y="414">CPU/memory alerting</text>
+
+        <!-- EFK -> AI diagnostics -->
+        <path class="dline-accent" d="M550,438 V480 H560 V510"/>
+        <polygon points="560,510 555,500 565,500" fill="var(--ok)"/>
+
+        <!-- Row 4: AI diagnostics -->
+        <rect class="dbox-accent" x="380" y="510" width="360" height="72" rx="6"/>
+        <text class="dtag" x="400" y="530">CLAUDE CODE — READ-ONLY</text>
+        <text class="dlabel" x="400" y="550">log-diagnostics skill</text>
+        <text class="dsub" x="400" y="568">20-min Kibana/kubectl dive → one command</text>
+
+        <!-- legend -->
+        <text class="dsub" x="400" y="612">— — — AI-agent path</text>
+        <text class="dsub" x="400" y="628">─── infra provisioning path</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head"><span class="idx mono">03</span><h2>Experience</h2></div>
+
+    <div class="log-entry">
+      <div class="tag"><span class="head">HEAD</span><br>nov 2022 → present</div>
+      <div>
+        <div class="log-role">Platform Engineer</div>
+        <div class="log-sub">Innovid <span class="sep">·</span> Chicago, IL <span class="sep">·</span> Hybrid</div>
+        <ul>
+          <li>Engineered log-diagnostics, a read-only Claude Code skill that cut a ~20-minute manual Kibana/kubectl root-cause dive down to one command</li>
+          <li>Shipped an AI PR-review agent (a customized Claude Code GitHub Action with a Jira MCP integration) across 30 repos, flagging requirement gaps and exposed secrets before merge</li>
+          <li>Provisioned EKS clusters via Terraform with autoscaling for ~10 services across dev/staging/prod, replacing manual cluster setup</li>
+          <li>Wired up a centralized EFK (Elasticsearch, Fluentd, Kibana) logging platform with S3 archival across ~10 services, replacing scattered per-service log access</li>
+          <li>Rolled out workloads through ArgoCD with auto-sync and self-heal enabled, eliminating manual deployment steps across the platform</li>
+          <li>Set up Prometheus alerting on memory/CPU thresholds across ~10 services, giving the team early visibility into resource pressure</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="tag"><span class="head" style="background:rgba(141,151,168,0.12); color:var(--text-dim); border-color:var(--border);">PRIOR</span><br>sep 2020 → oct 2022</div>
+      <div>
+        <div class="log-role">Platform Engineer</div>
+        <div class="log-sub">Hyatt Hotels Corporation <span class="sep">·</span> Chicago, IL <span class="sep">·</span> Hybrid</div>
+        <ul>
+          <li>Automated a GitHub Actions CI/CD pipeline, cutting deploy time from ~30 min to ~5 min</li>
+          <li>Migrated logging off CloudWatch to an EFK stack, adding full-text search across services CloudWatch didn't support</li>
+          <li>Tuned Grafana alert thresholds to cut noisy, duplicate pages, giving the team clearer dashboard visibility into service health</li>
+          <li>Tightened IAM least-privilege policies across roles</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stack">
+  <div class="wrap">
+    <div class="section-head"><span class="idx mono">04</span><h2>Stack</h2></div>
+    <div class="stack-grid">
+      <div class="stack-group">
+        <h3><svg class="icon"><use href="#icon-cloud"/></svg>AWS</h3>
+        <div class="tags"><span>EC2</span><span>ECS</span><span>ECR</span><span>API Gateway</span><span>VPC</span><span>IAM</span><span>Secrets Manager</span><span>S3</span><span>RDS</span><span>Lambda</span><span>EKS</span></div>
+      </div>
+      <div class="stack-group">
+        <h3><svg class="icon"><use href="#icon-box"/></svg>Infra &amp; Containers</h3>
+        <div class="tags"><span>Linux</span><span>Docker</span><span>Kubernetes</span></div>
+      </div>
+      <div class="stack-group">
+        <h3><svg class="icon"><use href="#icon-flow"/></svg>IaC &amp; Delivery</h3>
+        <div class="tags"><span>Terraform</span><span>GitHub Actions</span><span>ArgoCD</span></div>
+      </div>
+      <div class="stack-group">
+        <h3><svg class="icon"><use href="#icon-pulse"/></svg>Observability</h3>
+        <div class="tags"><span>Prometheus</span><span>Grafana</span><span>CloudWatch</span><span>Elasticsearch</span><span>Fluentd</span><span>Kibana</span></div>
+      </div>
+      <div class="stack-group">
+        <h3><svg class="icon"><use href="#icon-spark"/></svg>AI / Agentic</h3>
+        <div class="tags"><span>Claude Code</span><span>Agent Skills</span><span>MCP Servers</span><span>CLAUDE.md / AGENTS.md</span><span>AI-assisted incident triage</span></div>
+      </div>
+      <div class="stack-group">
+        <h3><svg class="icon"><use href="#icon-terminal"/></svg>Scripting</h3>
+        <div class="tags"><span>Bash</span><span>Python</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="section-head"><span class="idx mono">05</span><h2>Education &amp; Certifications</h2></div>
+    <div>
+      <div class="edu-item">
+        <div>
+          <div class="school"><svg class="icon icon-lg"><use href="#icon-cap"/></svg>University of Education, Winneba</div>
+          <div class="deg">Bachelor's, Construction Technology Education</div>
+        </div>
+        <div class="loc mono">Ghana</div>
+      </div>
+      <div class="edu-item">
+        <div>
+          <div class="school"><svg class="icon icon-lg"><use href="#icon-cap"/></svg>Kumasi Technical University</div>
+          <div class="deg">Higher National Diploma, Building Technology</div>
+        </div>
+        <div class="loc mono">Ghana</div>
+      </div>
+      <div class="edu-item">
+        <div>
+          <div class="school"><svg class="icon icon-lg"><use href="#icon-badge"/></svg>CKAD</div>
+          <div class="deg">Certified Kubernetes Application Developer</div>
+        </div>
+        <div class="loc mono">certification</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="section-head"><span class="idx mono">06</span><h2>Contact</h2></div>
+    <div class="terminal">
+      <div class="prompt"><span>$</span> connect --with richard</div>
+      <div class="contact-links">
+        <a href="mailto:richardbonsu09@gmail.com">richardbonsu09@gmail.com</a>
+        <a href="tel:+18723694706">872-369-4706</a>
+        <a href="https://www.linkedin.com/in/richardbonsu" target="_blank" rel="noopener">in/richardbonsu ↗</a>
+        <a href="#" style="pointer-events:none; color:var(--text-faint);">Chicago, IL</a>
+      </div>
+      <div class="foot-note">© 2026 Richard Bonsu — built &amp; deployed by its own subject.</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Hero pipeline load animation
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var stages = document.querySelectorAll('.stage');
+    var fills = [document.getElementById('fill-1'), document.getElementById('fill-2'), document.getElementById('fill-3')];
+    var heroName = document.getElementById('hero-name');
+
+    function activate(i){
+      if(stages[i]) stages[i].classList.add('active');
+      if(fills[i-1]) fills[i-1].style.width = '100%';
+    }
+
+    if(reduce){
+      stages.forEach(function(s){ s.classList.add('active'); });
+      fills.forEach(function(f){ f.style.width = '100%'; });
+      heroName.classList.add('in');
+      return;
+    }
+
+    var delays = [80, 480, 900, 1320];
+    delays.forEach(function(d, i){
+      setTimeout(function(){ activate(i); }, d);
+    });
+    setTimeout(function(){ heroName.classList.add('in'); }, 1500);
+  })();
+</script>
+
+</body>
+</html>
