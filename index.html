@@ -336,7 +336,7 @@
   .stat{ color:var(--ok); font-weight:600; }
   .stat.teal{ color:var(--text); font-weight:700; } /* secondary emphasis tier -- neutral, not a second hue */
 
-  /* ---------- WORKFLOW VISUALIZATION (hero-adjacent) ---------- */
+  /* ---------- WORKFLOW VISUALIZATION (hero-adjacent, flat 2D, click-to-open) ---------- */
   .flow-section{ padding:8px 0 64px; border-bottom:1px solid var(--border); }
   .flow-caption{
     text-align:center;
@@ -346,36 +346,37 @@
     margin-bottom:28px;
   }
   .flow-caption b{ color:var(--ok); font-weight:600; }
-  .flow-stage{
-    max-width:520px; margin:0 auto;
-    perspective:1000px;
-  }
-  .flow-tilt{
-    transition:transform .15s ease-out;
-    transform-style:preserve-3d;
-    will-change:transform;
-  }
+  .flow-stage{ max-width:520px; margin:0 auto; }
   .flow-svg{ display:block; width:100%; height:auto; overflow:visible; }
-  .flow-node{ cursor:default; outline:none; }
-  .flow-node[tabindex]{ cursor:pointer; }
+  .flow-node{ cursor:pointer; outline:none; }
   .flow-node:hover .dbox, .flow-node:hover .dbox-accent,
   .flow-node:focus-visible .dbox, .flow-node:focus-visible .dbox-accent{
-    stroke:var(--ok); stroke-width:2.25;
-    filter:drop-shadow(0 0 10px rgba(var(--ok-rgb),0.35));
+    stroke:var(--ok); stroke-width:2;
+    filter:drop-shadow(0 0 8px rgba(var(--ok-rgb),0.3));
+  }
+  .flow-node.selected .dbox, .flow-node.selected .dbox-accent{
+    stroke:var(--ok); stroke-width:2.5;
+    fill:rgba(var(--ok-rgb),0.08);
+    filter:drop-shadow(0 0 10px rgba(var(--ok-rgb),0.4));
   }
   .flow-node:focus-visible{ outline:none; }
-  .flow-line{ stroke:var(--border); stroke-width:1.5; fill:none; stroke-dasharray:5 5; }
+  .flow-line{
+    stroke:var(--border); stroke-width:1.5; fill:none; stroke-dasharray:5 5;
+    transition:stroke .2s ease, opacity .2s ease, stroke-dasharray .2s ease;
+  }
+  .flow-line.active{ stroke:var(--ok); opacity:1; stroke-dasharray:none; }
   .flow-pulse-dot{
     fill:var(--ok);
-    filter:drop-shadow(0 0 7px rgba(var(--ok-rgb),0.85));
+    filter:drop-shadow(0 0 6px rgba(var(--ok-rgb),0.75));
   }
   .flow-node-box{
-    filter:drop-shadow(0 6px 14px rgba(0,0,0,0.35));
-    animation:flowNodeFlash 8s ease-in-out infinite;
+    filter:drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    animation:flowNodeFlash 11s ease-in-out infinite;
   }
+  .flow-svg.paused .flow-node-box{ animation-play-state:paused; }
   @keyframes flowNodeFlash{
-    0%, 92%, 100% { stroke:var(--border); stroke-width:1.5; }
-    4%, 8%        { stroke:var(--ok); stroke-width:2.5; }
+    0%, 94%, 100% { stroke:var(--border); stroke-width:1.5; }
+    3%, 8%        { stroke:var(--ok); stroke-width:2.25; }
   }
 
   .flow-metrics{
@@ -404,6 +405,74 @@
     display:block; margin-top:4px;
     font-size:11px; color:var(--text-faint);
     line-height:1.3;
+  }
+
+  /* ---------- FLOW MODAL (popup) ---------- */
+  .flow-modal-backdrop{
+    position:fixed; inset:0; z-index:100;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(3px);
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    opacity:0; visibility:hidden;
+    transition:opacity .2s ease, visibility 0s linear .2s;
+  }
+  .flow-modal-backdrop.open{
+    opacity:1; visibility:visible;
+    transition:opacity .2s ease, visibility 0s linear 0s;
+  }
+  .flow-modal{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:14px;
+    max-width:440px; width:100%;
+    max-height:80vh; overflow-y:auto;
+    padding:28px 26px;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+    transform:translateY(14px) scale(0.97);
+    opacity:0;
+    transition:transform .22s cubic-bezier(.2,.8,.3,1), opacity .2s ease;
+  }
+  .flow-modal-backdrop.open .flow-modal{ transform:translateY(0) scale(1); opacity:1; }
+  .flow-modal-close{
+    position:absolute; top:16px; right:16px;
+    width:30px; height:30px;
+    border:none; border-radius:50%;
+    background:var(--panel-2); color:var(--text-dim);
+    font-size:17px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .flow-modal-close:hover, .flow-modal-close:focus-visible{ background:rgba(var(--ok-rgb),0.15); color:var(--ok); }
+  .flow-modal-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; letter-spacing:0.07em; text-transform:uppercase;
+    color:var(--ok);
+    margin-bottom:10px; padding-right:34px;
+  }
+  .flow-modal h3{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:22px; font-weight:700; color:var(--text);
+    margin-bottom:12px; padding-right:34px;
+  }
+  .flow-modal p{ font-size:14.5px; color:var(--text-dim); line-height:1.65; }
+  .flow-modal-outcome{
+    margin-top:16px; padding-top:16px;
+    border-top:1px solid var(--border);
+    font-size:14px; font-weight:600; color:var(--ok);
+    line-height:1.5;
+  }
+
+  @media (max-width:640px){
+    .flow-modal-backdrop{ align-items:flex-end; padding:0; }
+    .flow-modal{
+      max-width:none; border-radius:16px 16px 0 0;
+      max-height:85vh;
+      padding:26px 22px 32px;
+      transform:translateY(100%); scale:1;
+    }
+    .flow-modal-backdrop.open .flow-modal{ transform:translateY(0); }
   }
 
   /* ---------- ARCHITECTURE DIAGRAM ---------- */
@@ -916,99 +985,88 @@
 
 <section class="flow-section" aria-label="Platform engineering workflow">
   <div class="wrap">
-    <p class="flow-caption"><b>Code</b> → <b>Deploy</b> → <b>Observe</b> → <b>Diagnose</b> — hover any node</p>
+    <p class="flow-caption"><b>Code</b> → <b>Review</b> → <b>Infrastructure</b> → <b>Deploy</b> → <b>Observe</b> → <b>Diagnose</b> — click any node</p>
 
     <div class="flow-stage">
-      <div class="flow-tilt" id="flowTilt">
-        <svg class="flow-svg" id="flowSvg" viewBox="0 0 640 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flowTitle flowDesc">
-          <title id="flowTitle">Platform engineering workflow visualization</title>
-          <desc id="flowDesc">A visual representation of the engineering workflow: developer changes flow through GitHub, an AI PR-review agent, Terraform, EKS, Kubernetes, observability tooling, and a read-only Claude Code diagnostic skill. Not a live connection to any production system.</desc>
+      <svg class="flow-svg" id="flowSvg" viewBox="0 0 640 750" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flowTitle flowDesc">
+        <title id="flowTitle">Platform engineering workflow visualization</title>
+        <desc id="flowDesc">A visual representation of the engineering workflow: developer changes flow through GitHub, an AI PR-review agent, Terraform, EKS, observability tooling, and a read-only Claude Code diagnostic skill. Not a live connection to any production system. Click any node for detail.</desc>
 
-          <!-- connector path, reused for the traveling pulse's motion -->
-          <path class="flow-line" d="M320,78 L190,118 L190,176 L450,216 L450,282 L190,322 L190,388 L450,428 L450,494 L190,534 L190,592 L450,632 L450,706 L320,746"/>
-          <circle class="flow-pulse-dot" r="5">
-            <animateMotion dur="8s" repeatCount="indefinite" path="M320,78 L190,118 L190,176 L450,216 L450,282 L190,322 L190,388 L450,428 L450,494 L190,534 L190,592 L450,632 L450,706 L320,746"/>
-            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.03;0.97;1" dur="8s" repeatCount="indefinite"/>
-          </circle>
+        <!-- visible connector segments -- one per hop, individually highlightable -->
+        <path class="flow-line" data-seg="2" d="M320,78 L190,118"/>
+        <path class="flow-line" data-seg="3" d="M190,176 L450,216"/>
+        <path class="flow-line" data-seg="4" d="M450,282 L190,322"/>
+        <path class="flow-line" data-seg="5" d="M190,388 L450,428"/>
+        <path class="flow-line" data-seg="6" d="M450,494 L190,534"/>
+        <path class="flow-line" data-seg="7" d="M190,608 L320,648"/>
 
-          <!-- 1. Developer -->
-          <g class="flow-node" tabindex="0" role="img" aria-label="Developer — where every change starts">
-            <title>Developer — where every change starts</title>
-            <rect class="dbox flow-node-box" x="190" y="20" width="260" height="58" rx="8" style="animation-delay:-0.4s"/>
-            <svg x="208" y="34" width="18" height="18"><use href="#icon-user"/></svg>
-            <text class="dlabel" x="234" y="47">Developer</text>
-            <text class="dsub" x="234" y="65">where every change starts</text>
-          </g>
+        <!-- traveling pulse -- full path incl. pass-through segments hidden behind each node's own box -->
+        <circle class="flow-pulse-dot" r="5">
+          <animateMotion dur="11s" repeatCount="indefinite" path="M320,78 L190,118 L190,176 L450,216 L450,282 L190,322 L190,388 L450,428 L450,494 L190,534 L190,608 L320,648"/>
+          <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.02;0.98;1" dur="11s" repeatCount="indefinite"/>
+        </circle>
 
-          <!-- 2. GitHub / PR -->
-          <g class="flow-node" tabindex="0" role="img" aria-label="GitHub, pull requests opened across 30 repositories">
-            <title>GitHub — pull requests opened across 30 repos</title>
-            <rect class="dbox flow-node-box" x="60" y="118" width="260" height="58" rx="8" style="animation-delay:0.5s"/>
-            <svg x="78" y="132" width="18" height="18"><use href="#icon-flow"/></svg>
-            <text class="dlabel" x="104" y="145">GitHub / Pull Request</text>
-            <text class="dsub" x="104" y="163">30 repos, PR opened</text>
-          </g>
+        <!-- 1. Developer -->
+        <g class="flow-node" data-flow="developer" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Developer. Click for detail.">
+          <rect class="dbox flow-node-box" x="190" y="20" width="260" height="58" rx="8" style="animation-delay:-0.3s"/>
+          <svg x="208" y="34" width="18" height="18"><use href="#icon-user"/></svg>
+          <text class="dlabel" x="234" y="47">Developer</text>
+          <text class="dsub" x="234" y="65">where every change starts</text>
+        </g>
 
-          <!-- 3. CI/CD + AI PR Review -->
-          <g class="flow-node" tabindex="0" role="img" aria-label="CI/CD plus AI PR review, requirement and secret checks on every pull request">
-            <title>CI/CD + AI PR Review — requirement &amp; secret checks, every PR</title>
-            <rect class="dbox-accent flow-node-box" x="320" y="216" width="260" height="66" rx="8" style="animation-delay:1.76s"/>
-            <text class="dtag" x="338" y="236">CLAUDE CODE + JIRA MCP</text>
-            <svg x="338" y="245" width="16" height="16"><use href="#icon-spark"/></svg>
-            <text class="dlabel" x="360" y="257">CI/CD + AI PR Review</text>
-            <text class="dsub" x="338" y="273">requirement &amp; secret checks, every PR</text>
-          </g>
+        <!-- 2. GitHub / PR -->
+        <g class="flow-node" data-flow="github" tabindex="0" role="button" aria-haspopup="dialog" aria-label="GitHub, Pull Request. Click for detail.">
+          <rect class="dbox flow-node-box" x="60" y="118" width="260" height="58" rx="8" style="animation-delay:1.2s"/>
+          <svg x="78" y="132" width="18" height="18"><use href="#icon-flow"/></svg>
+          <text class="dlabel" x="104" y="145">GitHub / Pull Request</text>
+          <text class="dsub" x="104" y="163">30 repos, PR-gated</text>
+        </g>
 
-          <!-- 4. Terraform -->
-          <g class="flow-node" tabindex="0" role="img" aria-label="Terraform, reusable modules with per-environment tfvars">
-            <title>Terraform — reusable modules, per-environment tfvars</title>
-            <rect class="dbox flow-node-box" x="60" y="322" width="260" height="66" rx="8" style="animation-delay:2.96s"/>
-            <text class="dtag" x="78" y="342">TERRAFORM</text>
-            <svg x="78" y="351" width="16" height="16"><use href="#icon-box"/></svg>
-            <text class="dlabel" x="100" y="363">Infrastructure as Code</text>
-            <text class="dsub" x="78" y="379">reusable modules, per-env tfvars</text>
-          </g>
+        <!-- 3. CI/CD + AI PR Review -->
+        <g class="flow-node" data-flow="cicd" tabindex="0" role="button" aria-haspopup="dialog" aria-label="CI/CD plus AI PR Review. Click for detail.">
+          <rect class="dbox-accent flow-node-box" x="320" y="216" width="260" height="66" rx="8" style="animation-delay:3.2s"/>
+          <text class="dtag" x="338" y="236">CLAUDE CODE + JIRA MCP</text>
+          <svg x="338" y="245" width="16" height="16"><use href="#icon-spark"/></svg>
+          <text class="dlabel" x="360" y="257">CI/CD + AI Review</text>
+          <text class="dsub" x="338" y="273">requirement &amp; secret checks, every PR</text>
+        </g>
 
-          <!-- 5. AWS / EKS -->
-          <g class="flow-node" tabindex="0" role="img" aria-label="AWS EKS, 8 clusters across 3 environments">
-            <title>AWS / EKS — 8 clusters · 3 environments</title>
-            <rect class="dbox-accent flow-node-box" x="320" y="428" width="260" height="66" rx="8" style="animation-delay:4.24s"/>
-            <text class="dtag" x="338" y="448">AWS</text>
-            <svg x="338" y="457" width="16" height="16"><use href="#icon-cloud"/></svg>
-            <text class="dlabel" x="360" y="469">EKS Clusters</text>
-            <text class="dsub" x="338" y="485">8 clusters · 3 environments</text>
-          </g>
+        <!-- 4. Terraform -->
+        <g class="flow-node" data-flow="terraform" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Terraform. Click for detail.">
+          <rect class="dbox flow-node-box" x="60" y="322" width="260" height="66" rx="8" style="animation-delay:5.2s"/>
+          <text class="dtag" x="78" y="342">TERRAFORM</text>
+          <svg x="78" y="351" width="16" height="16"><use href="#icon-box"/></svg>
+          <text class="dlabel" x="100" y="363">Infrastructure as Code</text>
+          <text class="dsub" x="78" y="379">reusable modules, per-env tfvars</text>
+        </g>
 
-          <!-- 6. Kubernetes Platform -->
-          <g class="flow-node" tabindex="0" role="img" aria-label="Kubernetes platform, autoscaling and self-healing via ArgoCD">
-            <title>Kubernetes Platform — autoscaling, self-healing via ArgoCD</title>
-            <rect class="dbox flow-node-box" x="60" y="534" width="260" height="58" rx="8" style="animation-delay:5.44s"/>
-            <svg x="78" y="548" width="18" height="18"><use href="#icon-layers"/></svg>
-            <text class="dlabel" x="104" y="561">Kubernetes Platform</text>
-            <text class="dsub" x="104" y="579">autoscaling, self-heal via ArgoCD</text>
-          </g>
+        <!-- 5. AWS / EKS (incl. dev/staging/prod) -->
+        <g class="flow-node" data-flow="eks" tabindex="0" role="button" aria-haspopup="dialog" aria-label="AWS EKS. Click for detail.">
+          <rect class="dbox-accent flow-node-box" x="320" y="428" width="260" height="66" rx="8" style="animation-delay:7.2s"/>
+          <text class="dtag" x="338" y="448">AWS · DEV / STAGING / PROD</text>
+          <svg x="338" y="457" width="16" height="16"><use href="#icon-cloud"/></svg>
+          <text class="dlabel" x="360" y="469">EKS Clusters</text>
+          <text class="dsub" x="338" y="485">8 clusters · 3 environments</text>
+        </g>
 
-          <!-- 7. Observability -->
-          <g class="flow-node" tabindex="0" role="img" aria-label="Observability, Prometheus Grafana and EFK, production metrics dashboards and centralized logging">
-            <title>Prometheus · Grafana · EFK — production metrics, dashboards, and centralized logging</title>
-            <rect class="dbox-accent flow-node-box" x="320" y="632" width="260" height="74" rx="8" style="animation-delay:6.64s"/>
-            <text class="dtag" x="338" y="652">PROMETHEUS · GRAFANA · EFK</text>
-            <svg x="338" y="661" width="16" height="16"><use href="#icon-pulse"/></svg>
-            <text class="dlabel" x="360" y="673">Observability</text>
-            <text class="dsub" x="338" y="691">metrics, dashboards, centralized logs</text>
-          </g>
+        <!-- 6. Observability -->
+        <g class="flow-node" data-flow="observability" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Observability, Prometheus Grafana EFK. Click for detail.">
+          <rect class="dbox flow-node-box" x="60" y="534" width="260" height="74" rx="8" style="animation-delay:9.2s"/>
+          <text class="dtag" x="78" y="554">PROMETHEUS · GRAFANA · EFK</text>
+          <svg x="78" y="563" width="16" height="16"><use href="#icon-pulse"/></svg>
+          <text class="dlabel" x="100" y="575">Observability</text>
+          <text class="dsub" x="78" y="593">metrics, dashboards, centralized logs</text>
+        </g>
 
-          <!-- 8. Claude Code / AI Diagnostics -->
-          <g class="flow-node" tabindex="0" role="img" aria-label="Claude Code AI diagnostics, read-only skill, 20 minute manual investigation reduced to one command">
-            <title>Claude Code — AI-Assisted Diagnostics (read-only): ~20 min manual investigation → 1 command</title>
-            <rect class="dbox-accent flow-node-box" x="190" y="746" width="260" height="74" rx="8" style="animation-delay:7.6s"/>
-            <text class="dtag" x="208" y="766">CLAUDE CODE — READ-ONLY</text>
-            <svg x="208" y="775" width="16" height="16"><use href="#icon-badge"/></svg>
-            <text class="dlabel" x="230" y="787">AI Diagnostics</text>
-            <text class="dsub" x="208" y="805">~20 min manual trace → 1 command</text>
-          </g>
-        </svg>
-      </div>
+        <!-- 7. Claude Code / AI Diagnostics -->
+        <g class="flow-node" data-flow="claude" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Claude Code AI Diagnostics. Click for detail.">
+          <rect class="dbox-accent flow-node-box" x="190" y="648" width="260" height="74" rx="8" style="animation-delay:10.7s"/>
+          <text class="dtag" x="208" y="668">CLAUDE CODE — READ-ONLY</text>
+          <svg x="208" y="677" width="16" height="16"><use href="#icon-badge"/></svg>
+          <text class="dlabel" x="230" y="689">AI Diagnostics</text>
+          <text class="dsub" x="208" y="707">~20 min manual trace → 1 command</text>
+        </g>
+      </svg>
     </div>
 
     <div class="flow-metrics">
@@ -1019,6 +1077,17 @@
         <div><strong>30</strong><span>Repositories</span></div>
         <div><strong>45</strong><span>Deploys / Week</span></div>
       </div>
+    </div>
+  </div>
+
+  <!-- Popup: opens on node click, closes via X / Escape / outside click -->
+  <div class="flow-modal-backdrop" id="flowModalBackdrop">
+    <div class="flow-modal" role="dialog" aria-modal="true" aria-labelledby="flowModalTitle" id="flowModal">
+      <button class="flow-modal-close" id="flowModalClose" type="button" aria-label="Close">&times;</button>
+      <div class="flow-modal-tag" id="flowModalTag"></div>
+      <h3 id="flowModalTitle"></h3>
+      <p id="flowModalBody"></p>
+      <div class="flow-modal-outcome" id="flowModalOutcome"></div>
     </div>
   </div>
 </section>
@@ -1561,32 +1630,114 @@
     closeBtn.addEventListener('click', closePanel);
   })();
 
-  // Workflow visualization -- mouse-parallax tilt only, gated for touch/reduced-motion.
-  // Everything else (pulse dot motion, per-node flash) is CSS/SMIL and needs no JS at all.
+  // Workflow visualization -- click-to-open popups. Pulse motion and per-node
+  // flash are pure CSS/SMIL and need no JS; this only handles the modal.
   (function(){
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-    var stage = document.querySelector('.flow-stage');
-    var tilt = document.getElementById('flowTilt');
-    if(!stage || !tilt || reduce || !canHover) return;
+    var FLOW_INFO = {
+      developer: {
+        seg: null, tag: 'DEVELOPER', title: 'Developer Self-Service',
+        body: 'Designed the platform so developers could deploy, observe, and debug their own services without routine DevOps tickets — not unrestricted infrastructure access, but a self-service path for the day-to-day.',
+        outcome: ''
+      },
+      github: {
+        seg: 2, tag: 'GITHUB · 30 REPOS', title: 'PR-Gated Engineering Workflow',
+        body: 'Every infrastructure and application change ships through a pull request. An AI review agent checks each PR against its linked Jira ticket and scans for exposed secrets before a human looks at it — running across all 30 repositories the platform covers.',
+        outcome: ''
+      },
+      cicd: {
+        seg: 3, tag: 'CLAUDE CODE + JIRA MCP', title: 'Automated Delivery & AI Review',
+        body: 'Automated delivery workflows and a Claude Code–based PR review agent integrated with Jira MCP — pulling the linked ticket through a real API call, not pasted text, and comparing what was asked against what was delivered.',
+        outcome: 'Catches missed requirements and exposed secrets before merge.'
+      },
+      terraform: {
+        seg: 4, tag: 'TERRAFORM', title: 'Infrastructure as Code',
+        body: 'Provisioned EKS infrastructure through Terraform, with infrastructure changes managed through pull requests — reusable modules with per-environment tfvars, so an environment’s config lives in one place.',
+        outcome: 'Config drift eliminated structurally, not chased down after the fact.'
+      },
+      eks: {
+        seg: 5, tag: 'AWS · DEV / STAGING / PROD', title: 'Kubernetes Platform',
+        body: 'Runs Kubernetes workloads across three environments — development, staging, and production — provisioned and managed through the same Terraform module, with autoscaling in place.',
+        outcome: '8 EKS clusters · 3 environments'
+      },
+      observability: {
+        seg: 6, tag: 'PROMETHEUS · GRAFANA · EFK', title: 'Observability',
+        body: 'Prometheus alerts on memory and CPU thresholds; Grafana confirms the trend before anyone acts on it. A centralized EFK stack with S3 archival replaces scattered per-service log access.',
+        outcome: ''
+      },
+      claude: {
+        seg: 7, tag: 'CLAUDE CODE — READ-ONLY', title: 'AI-Assisted Diagnostics',
+        body: 'A read-only Claude Code skill investigates Kubernetes and application logs — correlating Kibana error patterns with live kubectl state to surface a ranked root cause. It never modifies production; a human always confirms and acts.',
+        outcome: '~20-minute manual investigation → 1 command'
+      }
+    };
 
-    var MAX_DEG = 4; // small on purpose -- "slight rotation", not a gimmick
-    var raf = null;
+    var svg = document.getElementById('flowSvg');
+    var nodes = document.querySelectorAll('.flow-node');
+    var backdrop = document.getElementById('flowModalBackdrop');
+    var modal = document.getElementById('flowModal');
+    var closeBtn = document.getElementById('flowModalClose');
+    var tagEl = document.getElementById('flowModalTag');
+    var titleEl = document.getElementById('flowModalTitle');
+    var bodyEl = document.getElementById('flowModalBody');
+    var outcomeEl = document.getElementById('flowModalOutcome');
+    if(!svg || !nodes.length || !backdrop || !modal) return;
 
-    stage.addEventListener('mousemove', function(e){
-      var rect = stage.getBoundingClientRect();
-      var px = (e.clientX - rect.left) / rect.width;  // 0..1
-      var py = (e.clientY - rect.top) / rect.height;  // 0..1
-      var rotY = (px - 0.5) * 2 * MAX_DEG;
-      var rotX = (0.5 - py) * 2 * MAX_DEG;
-      if(raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(function(){
-        tilt.style.transform = 'rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg)';
+    var lastFocused = null;
+
+    function setSegActive(seg, on){
+      if(!seg) return;
+      var line = svg.querySelector('.flow-line[data-seg="' + seg + '"]');
+      if(line) line.classList.toggle('active', on);
+    }
+
+    function openNode(key, triggerEl){
+      var info = FLOW_INFO[key];
+      if(!info) return;
+
+      // 1. highlight this node's incoming connection
+      setSegActive(info.seg, true);
+      // 2. select the node itself
+      nodes.forEach(function(n){ n.classList.toggle('selected', n.getAttribute('data-flow') === key); });
+      // pause the ambient animation while the popup is open
+      try { svg.pauseAnimations(); } catch(e){}
+      svg.classList.add('paused');
+
+      // 3. fill and open the popup
+      tagEl.textContent = info.tag;
+      titleEl.textContent = info.title;
+      bodyEl.textContent = info.body;
+      outcomeEl.textContent = info.outcome || '';
+      outcomeEl.style.display = info.outcome ? 'block' : 'none';
+      lastFocused = triggerEl || document.activeElement;
+      backdrop.classList.add('open');
+      closeBtn.focus();
+    }
+
+    function closeNode(){
+      if(!backdrop.classList.contains('open')) return;
+      backdrop.classList.remove('open');
+      nodes.forEach(function(n){ n.classList.remove('selected'); });
+      svg.querySelectorAll('.flow-line.active').forEach(function(l){ l.classList.remove('active'); });
+      // 4. resume normal animation
+      svg.classList.remove('paused');
+      try { svg.unpauseAnimations(); } catch(e){}
+      if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    }
+
+    nodes.forEach(function(n){
+      var key = n.getAttribute('data-flow');
+      n.addEventListener('click', function(){ openNode(key, n); });
+      n.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openNode(key, n); }
       });
     });
-    stage.addEventListener('mouseleave', function(){
-      if(raf) cancelAnimationFrame(raf);
-      tilt.style.transform = 'rotateX(0deg) rotateY(0deg)';
+
+    closeBtn.addEventListener('click', closeNode);
+    backdrop.addEventListener('click', function(e){
+      if(e.target === backdrop) closeNode(); // outside click (on the backdrop itself)
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && backdrop.classList.contains('open')) closeNode();
     });
   })();
 
