@@ -9,17 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #10141B;
-    --panel: #171D27;
-    --panel-2: #1C2330;
-    --border: #262E3B;
-    --text: #EAF0F3;
-    --text-dim: #8D97A8;
-    --text-faint: #5B6478;
-    --ok: #4FA8E8;
-    --ok-dim: #2A5A80;
-    --build: #E3A857;
-    --radius: 3px;
+    --bg: #F6F9FD;
+    --panel: #FFFFFF;
+    --panel-2: #EDF3FC;
+    --border: #DAE3F0;
+    --text: #16213A;
+    --text-dim: #47567A;
+    --text-faint: #808EAC;
+    --ok: #2563EB;
+    --ok-dim: #B9CFFB;
+    --build: #0D9488;
+    --radius: 4px;
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -41,7 +41,7 @@
     position:fixed;
     top:-20%; left:-10%;
     width:70vw; height:70vw;
-    background:radial-gradient(circle, rgba(79,168,232,0.16) 0%, rgba(79,168,232,0) 60%);
+    background:radial-gradient(circle, rgba(37,99,235,0.16) 0%, rgba(37,99,235,0) 60%);
     filter:blur(10px);
     pointer-events:none;
     z-index:0;
@@ -52,7 +52,7 @@
     position:fixed;
     bottom:-25%; right:-15%;
     width:60vw; height:60vw;
-    background:radial-gradient(circle, rgba(90,169,230,0.13) 0%, rgba(90,169,230,0) 60%);
+    background:radial-gradient(circle, rgba(13,148,136,0.13) 0%, rgba(13,148,136,0) 60%);
     filter:blur(10px);
     pointer-events:none;
     z-index:0;
@@ -81,7 +81,7 @@
   /* ---------- NAV ---------- */
   header.site{
     position:sticky; top:0; z-index:50;
-    background:rgba(16,20,27,0.88);
+    background:rgba(246,249,253,0.88);
     backdrop-filter:blur(8px);
     border-bottom:1px solid var(--border);
   }
@@ -95,7 +95,7 @@
     font-size:14px;
     letter-spacing:0.06em;
   }
-  .brand span{ color:var(--ok); text-shadow:0 0 12px rgba(79,168,232,0.6); }
+  .brand span{ color:var(--ok); text-shadow:0 0 12px rgba(37,99,235,0.6); }
   .nav-links{
     display:flex; align-items:center; gap:28px;
     font-family:'IBM Plex Mono', monospace;
@@ -111,21 +111,21 @@
     font-size:11px; letter-spacing:0.05em;
     color:var(--ok);
     border:1px solid var(--ok-dim);
-    background:linear-gradient(135deg, rgba(79,168,232,0.1), rgba(79,168,232,0.03));
+    background:linear-gradient(135deg, rgba(37,99,235,0.1), rgba(37,99,235,0.03));
     padding:6px 11px;
     border-radius:20px;
-    box-shadow:0 0 16px -4px rgba(79,168,232,0.35);
+    box-shadow:0 0 16px -4px rgba(37,99,235,0.35);
   }
   .dot{
     width:6px; height:6px; border-radius:50%;
     background:var(--ok);
-    box-shadow:0 0 0 0 rgba(79,168,232,0.5);
+    box-shadow:0 0 0 0 rgba(37,99,235,0.5);
     animation:pulse 2.2s infinite;
   }
   @keyframes pulse{
-    0%{ box-shadow:0 0 0 0 rgba(79,168,232,0.45); }
-    70%{ box-shadow:0 0 0 6px rgba(79,168,232,0); }
-    100%{ box-shadow:0 0 0 0 rgba(79,168,232,0); }
+    0%{ box-shadow:0 0 0 0 rgba(37,99,235,0.45); }
+    70%{ box-shadow:0 0 0 6px rgba(37,99,235,0); }
+    100%{ box-shadow:0 0 0 0 rgba(37,99,235,0); }
   }
   .nav-toggle{ display:none; }
 
@@ -157,7 +157,7 @@
   .stage.active .node{
     background:var(--ok);
     border-color:var(--ok);
-    box-shadow:0 0 8px rgba(79,168,232,0.55);
+    box-shadow:0 0 8px rgba(37,99,235,0.55);
   }
   .stage.building .node{
     background:var(--build);
@@ -187,11 +187,11 @@
     opacity:0;
     transform:translateY(8px);
     transition:opacity .5s ease, transform .5s ease;
-    background:linear-gradient(100deg, #ffffff 0%, #ffffff 40%, var(--ok) 75%, #8ED0FF 100%);
+    background:linear-gradient(100deg, var(--text) 0%, var(--text) 35%, var(--ok) 72%, var(--build) 100%);
     -webkit-background-clip:text;
     background-clip:text;
     -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 0 22px rgba(79,168,232,0.25));
+    filter:drop-shadow(0 0 18px rgba(37,99,235,0.14));
   }
   .hero h1.in{ opacity:1; transform:translateY(0); }
 
@@ -228,11 +228,11 @@
     overflow:hidden;
   }
   .btn.primary{
-    background:linear-gradient(135deg, #7EC8F5 0%, var(--ok) 55%, #2E7FBF 100%);
-    color:#0B1420;
+    background:linear-gradient(135deg, #4C8DF7 0%, var(--ok) 55%, #1D4FC4 100%);
+    color:#FFFFFF;
     border-color:var(--ok);
     font-weight:600;
-    box-shadow:0 4px 20px rgba(79,168,232,0.25);
+    box-shadow:0 4px 20px rgba(37,99,235,0.25);
   }
   .btn.primary::after{
     content:"";
@@ -243,18 +243,22 @@
     transition:left .55s ease;
   }
   .btn.primary:hover::after{ left:140%; }
-  .btn.primary:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(79,168,232,0.4); }
-  .btn.secondary{ background:rgba(255,255,255,0.02); backdrop-filter:blur(6px); }
-  .btn.secondary:hover{ border-color:var(--text-dim); background:rgba(255,255,255,0.04); transform:translateY(-1px); }
+  .btn.primary:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(37,99,235,0.4); }
+  .btn.secondary{ background:rgba(22,33,58,0.03); color:var(--text); backdrop-filter:blur(6px); }
+  .btn.secondary:hover{ border-color:var(--ok); color:var(--ok); background:rgba(37,99,235,0.05); transform:translateY(-1px); }
 
   /* ---------- ICONS ---------- */
   .icon{
     width:17px; height:17px;
     color:var(--ok);
     flex-shrink:0;
-    filter:drop-shadow(0 0 5px rgba(79,168,232,0.35));
+    filter:drop-shadow(0 0 5px rgba(37,99,235,0.35));
   }
   .icon-lg{ width:22px; height:22px; }
+
+  /* ---------- STAT HIGHLIGHT ---------- */
+  .stat{ color:var(--ok); font-weight:600; }
+  .stat.teal{ color:var(--build); }
 
   /* ---------- ARCHITECTURE DIAGRAM ---------- */
   .diagram-caption{
@@ -264,13 +268,13 @@
     margin-bottom:28px;
   }
   .diagram-frame{
-    background:linear-gradient(160deg, rgba(28,35,48,0.9), rgba(23,29,39,0.75));
+    background:linear-gradient(160deg, rgba(255,255,255,0.95), rgba(237,243,252,0.85));
     backdrop-filter:blur(10px);
     border:1px solid var(--border);
     border-radius:8px;
     padding:20px;
     overflow-x:auto;
-    box-shadow:0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+    box-shadow:0 20px 50px -20px rgba(22,33,58,0.10), inset 0 1px 0 rgba(255,255,255,0.6);
   }
   .diagram-frame svg{
     display:block;
@@ -282,7 +286,7 @@
   /* ---------- SECTION SHELL ---------- */
   section{ padding:64px 0; border-bottom:1px solid var(--border); }
   .section-head{
-    display:flex; align-items:baseline; gap:14px;
+    display:flex; align-items:center; gap:12px;
     margin-bottom:32px;
   }
   .section-head .idx{
@@ -300,17 +304,17 @@
 
   /* ---------- ABOUT ---------- */
   .manifest{
-    background:linear-gradient(160deg, rgba(28,35,48,0.9), rgba(23,29,39,0.75));
+    background:linear-gradient(160deg, rgba(255,255,255,0.95), rgba(237,243,252,0.85));
     backdrop-filter:blur(10px);
     border:1px solid var(--border);
     border-radius:8px;
     overflow:hidden;
-    box-shadow:0 20px 50px -20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.03);
+    box-shadow:0 20px 50px -20px rgba(22,33,58,0.10), inset 0 1px 0 rgba(255,255,255,0.6);
     transition:border-color .25s ease, box-shadow .25s ease;
   }
   .manifest:hover{
     border-color:var(--ok-dim);
-    box-shadow:0 20px 50px -20px rgba(0,0,0,0.5), 0 0 30px -8px rgba(79,168,232,0.25), inset 0 1px 0 rgba(255,255,255,0.03);
+    box-shadow:0 20px 50px -20px rgba(22,33,58,0.10), 0 0 30px -8px rgba(37,99,235,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
   }
   .manifest-head{
     padding:14px 22px;
@@ -335,7 +339,7 @@
     border-radius:8px;
     transition:background .2s ease, transform .2s ease;
   }
-  .log-entry:hover{ background:rgba(79,168,232,0.035); transform:translateX(2px); }
+  .log-entry:hover{ background:rgba(37,99,235,0.035); transform:translateX(2px); }
   .log-entry:first-child{ border-top:none; padding-top:0; margin-top:0; }
   .tag{
     font-family:'IBM Plex Mono', monospace;
@@ -344,7 +348,7 @@
   }
   .tag .head{
     display:inline-block;
-    background:rgba(79,168,232,0.1);
+    background:rgba(37,99,235,0.1);
     color:var(--ok);
     border:1px solid var(--ok-dim);
     padding:2px 7px;
@@ -390,13 +394,13 @@
     overflow:hidden;
   }
   .stack-group{
-    background:linear-gradient(160deg, rgba(28,35,48,0.85), rgba(23,29,39,0.6));
+    background:linear-gradient(160deg, rgba(255,255,255,0.9), rgba(237,243,252,0.65));
     padding:22px 24px;
     transition:background .2s ease, box-shadow .2s ease;
   }
   .stack-group:hover{
-    background:linear-gradient(160deg, rgba(32,42,56,0.95), rgba(23,29,39,0.7));
-    box-shadow:inset 0 0 0 1px rgba(79,168,232,0.15);
+    background:linear-gradient(160deg, rgba(255,255,255,1), rgba(230,238,251,0.9));
+    box-shadow:inset 0 0 0 1px rgba(37,99,235,0.15);
   }
   .stack-group h3{
     font-family:'IBM Plex Mono', monospace;
@@ -421,7 +425,7 @@
   .tags span:hover{
     border-color:var(--ok);
     color:var(--ok);
-    box-shadow:0 0 12px -2px rgba(79,168,232,0.4);
+    box-shadow:0 0 12px -2px rgba(37,99,235,0.4);
     transform:translateY(-1px);
   }
 
@@ -445,12 +449,12 @@
   /* ---------- CONTACT / FOOTER ---------- */
   footer{ padding:64px 0 48px; }
   .terminal{
-    background:linear-gradient(160deg, rgba(28,35,48,0.9), rgba(23,29,39,0.75));
+    background:linear-gradient(160deg, rgba(255,255,255,0.95), rgba(237,243,252,0.85));
     backdrop-filter:blur(10px);
     border:1px solid var(--border);
     border-radius:8px;
     padding:28px 30px;
-    box-shadow:0 20px 60px -25px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+    box-shadow:0 20px 60px -25px rgba(22,33,58,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
   }
   .terminal .prompt{
     font-family:'IBM Plex Mono', monospace;
@@ -468,7 +472,7 @@
     border-radius:var(--radius);
     transition:border-color .15s ease, box-shadow .2s ease, transform .15s ease;
   }
-  .contact-links a:hover{ border-color:var(--ok); color:var(--ok); box-shadow:0 0 16px -3px rgba(79,168,232,0.45); transform:translateY(-1px); }
+  .contact-links a:hover{ border-color:var(--ok); color:var(--ok); box-shadow:0 0 16px -3px rgba(37,99,235,0.45); transform:translateY(-1px); }
   .foot-note{
     font-family:'IBM Plex Mono', monospace;
     font-size:11.5px;
@@ -553,6 +557,23 @@
     <path d="M12 3 19 6v6c0 4.5-3 7-7 9-4-2-7-4.5-7-9V6Z"/>
     <path d="M9 12l2 2 4-4.5"/>
   </symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="3.6"/>
+    <path d="M4.5 20c1.4-4 4.2-6 7.5-6s6.1 2 7.5 6"/>
+  </symbol>
+  <symbol id="icon-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="8" width="18" height="12" rx="2"/>
+    <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    <path d="M3 13h18"/>
+  </symbol>
+  <symbol id="icon-layers" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 21 8 12 13 3 8Z"/>
+    <path d="M3 13l9 5 9-5"/>
+  </symbol>
+  <symbol id="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2"/>
+    <path d="M3 6.5 12 13 21 6.5"/>
+  </symbol>
 </svg>
 
 <header class="site">
@@ -600,7 +621,7 @@
 
 <section id="about">
   <div class="wrap">
-    <div class="section-head"><span class="idx mono">01</span><h2>About</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-user"/></svg><span class="idx mono">01</span><h2>About</h2></div>
     <div class="manifest">
       <div class="manifest-head">
         <span><b>service:</b> richard-bonsu</span>
@@ -609,12 +630,12 @@
       </div>
       <div class="manifest-body">
         <p>
-          Platform engineer with 6 years running production infrastructure — from Hyatt's enterprise AWS
-          environment to an EKS platform at Innovid (8+ clusters provisioned via Terraform over time), a
-          connected-TV advertising platform. Built the Innovid platform for self-service by design: developers
-          deploy, observe, and debug their own services — no ticket to DevOps required. Builds and runs agentic
-          workflows (Claude Code, custom skills, Jira MCP), PR-gated against production infrastructure across
-          30 repos.
+          Platform engineer with <span class="stat">6 years</span> running production infrastructure — from
+          Hyatt's enterprise AWS environment to an EKS platform at Innovid (<span class="stat">8+ clusters</span>
+          provisioned via Terraform over time), a connected-TV advertising platform. Built the Innovid platform
+          for <span class="stat teal">self-service by design</span>: developers deploy, observe, and debug their
+          own services — no ticket to DevOps required. Builds and runs agentic workflows (Claude Code, custom
+          skills, Jira MCP), PR-gated against production infrastructure across <span class="stat">30 repos</span>.
         </p>
       </div>
     </div>
@@ -623,7 +644,7 @@
 
 <section id="architecture">
   <div class="wrap">
-    <div class="section-head"><span class="idx mono">02</span><h2>Platform Architecture</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-flow"/></svg><span class="idx mono">02</span><h2>Platform Architecture</h2></div>
     <p class="diagram-caption">How a change gets from a pull request to running in production — the platform I built and run at Innovid.</p>
 
     <div class="diagram-frame">
@@ -723,20 +744,20 @@
 
 <section id="experience">
   <div class="wrap">
-    <div class="section-head"><span class="idx mono">03</span><h2>Experience</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-briefcase"/></svg><span class="idx mono">03</span><h2>Experience</h2></div>
 
     <div class="log-entry">
       <div class="tag"><span class="head">HEAD</span><br>nov 2022 → present</div>
       <div>
-        <div class="log-role">Platform Engineer</div>
+        <div class="log-role">Platform Engineer <span aria-hidden="true" title="current role">🚀</span></div>
         <div class="log-sub">Innovid <span class="sep">·</span> Chicago, IL <span class="sep">·</span> Hybrid</div>
         <ul>
-          <li>Shipped an AI PR-review agent (a customized Claude Code GitHub Action with a Jira MCP integration) across 30 repos, catching requirement gaps and exposed secrets before merge</li>
-          <li>Built log-diagnostics, a Claude Code skill that traced a production OOM-kill in one command, replacing what had been a 20-minute manual Kibana/kubectl dive</li>
-          <li>Provisioned 8+ EKS clusters via Terraform over time, with autoscaling — replacing manual cluster setup</li>
-          <li>Wired up a centralized EFK (Elasticsearch, Fluentd, Kibana) logging platform with S3 archival across 10 services, replacing scattered per-service log access</li>
-          <li>Rolled out workloads through ArgoCD with auto-sync and self-heal enabled, supporting 45 deploys/week and eliminating manual deployment steps</li>
-          <li>Set up Prometheus/Grafana alerting on memory/CPU thresholds — caught a sustained memory climb on a production service and resolved it same-day, before it affected customers</li>
+          <li>Shipped an AI PR-review agent (a customized Claude Code GitHub Action with a Jira MCP integration) across <span class="stat">30 repos</span>, catching requirement gaps and exposed secrets before merge</li>
+          <li>Built log-diagnostics, a Claude Code skill that traced a production OOM-kill in one command, replacing what had been a <span class="stat">20-minute</span> manual Kibana/kubectl dive</li>
+          <li>Provisioned <span class="stat">8+ EKS clusters</span> via Terraform over time, with autoscaling — replacing manual cluster setup</li>
+          <li>Wired up a centralized EFK (Elasticsearch, Fluentd, Kibana) logging platform with S3 archival across <span class="stat">10 services</span>, replacing scattered per-service log access</li>
+          <li>Rolled out workloads through ArgoCD with auto-sync and self-heal enabled, supporting <span class="stat">⚡ 45 deploys/week</span> and eliminating manual deployment steps</li>
+          <li>Set up Prometheus/Grafana alerting on memory/CPU thresholds — caught a sustained memory climb on a production service and resolved it <span class="stat teal">same-day</span>, before it affected customers</li>
         </ul>
       </div>
     </div>
@@ -747,9 +768,9 @@
         <div class="log-role">Platform Engineer</div>
         <div class="log-sub">Hyatt Hotels Corporation <span class="sep">·</span> Chicago, IL <span class="sep">·</span> Hybrid</div>
         <ul>
-          <li>Automated a GitHub Actions CI/CD pipeline, replacing manual app prep, deployment, and post-deploy validation — cutting deploy time from 30 minutes to 5 minutes and making releases consistent</li>
+          <li>Automated a GitHub Actions CI/CD pipeline, replacing manual app prep, deployment, and post-deploy validation — cutting deploy time from <span class="stat">30 minutes to 5</span> and making releases consistent</li>
           <li>Migrated logging off CloudWatch to an EFK stack, adding full-text search across services CloudWatch didn't support</li>
-          <li>Hardened AWS IAM policies across 8 application and infrastructure roles, removing 30% of granted permissions to enforce least privilege and reduce the blast radius of a compromised credential or workload</li>
+          <li>Hardened AWS IAM policies across <span class="stat teal">8 roles</span>, removing <span class="stat teal">30% of granted permissions</span> to enforce least privilege and reduce the blast radius of a compromised credential or workload</li>
           <li>Tuned Grafana alert thresholds to cut noisy, duplicate pages for the same incident</li>
         </ul>
       </div>
@@ -759,7 +780,7 @@
 
 <section id="stack">
   <div class="wrap">
-    <div class="section-head"><span class="idx mono">04</span><h2>Stack</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-layers"/></svg><span class="idx mono">04</span><h2>Stack</h2></div>
     <div class="stack-grid">
       <div class="stack-group">
         <h3><svg class="icon"><use href="#icon-cloud"/></svg>AWS</h3>
@@ -791,7 +812,7 @@
 
 <section id="education">
   <div class="wrap">
-    <div class="section-head"><span class="idx mono">05</span><h2>Education &amp; Certifications</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-cap"/></svg><span class="idx mono">05</span><h2>Education &amp; Certifications</h2></div>
     <div>
       <div class="edu-item">
         <div>
@@ -820,7 +841,7 @@
 
 <footer id="contact">
   <div class="wrap">
-    <div class="section-head"><span class="idx mono">06</span><h2>Contact</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-mail"/></svg><span class="idx mono">06</span><h2>Contact</h2></div>
     <div class="terminal">
       <div class="prompt"><span>$</span> connect --with richard</div>
       <div class="contact-links">
