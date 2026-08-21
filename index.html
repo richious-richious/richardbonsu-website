@@ -336,6 +336,76 @@
   .stat{ color:var(--ok); font-weight:600; }
   .stat.teal{ color:var(--text); font-weight:700; } /* secondary emphasis tier -- neutral, not a second hue */
 
+  /* ---------- WORKFLOW VISUALIZATION (hero-adjacent) ---------- */
+  .flow-section{ padding:8px 0 64px; border-bottom:1px solid var(--border); }
+  .flow-caption{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; letter-spacing:0.08em;
+    color:var(--text-faint);
+    margin-bottom:28px;
+  }
+  .flow-caption b{ color:var(--ok); font-weight:600; }
+  .flow-stage{
+    max-width:520px; margin:0 auto;
+    perspective:1000px;
+  }
+  .flow-tilt{
+    transition:transform .15s ease-out;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .flow-svg{ display:block; width:100%; height:auto; overflow:visible; }
+  .flow-node{ cursor:default; outline:none; }
+  .flow-node[tabindex]{ cursor:pointer; }
+  .flow-node:hover .dbox, .flow-node:hover .dbox-accent,
+  .flow-node:focus-visible .dbox, .flow-node:focus-visible .dbox-accent{
+    stroke:var(--ok); stroke-width:2.25;
+    filter:drop-shadow(0 0 10px rgba(var(--ok-rgb),0.35));
+  }
+  .flow-node:focus-visible{ outline:none; }
+  .flow-line{ stroke:var(--border); stroke-width:1.5; fill:none; stroke-dasharray:5 5; }
+  .flow-pulse-dot{
+    fill:var(--ok);
+    filter:drop-shadow(0 0 7px rgba(var(--ok-rgb),0.85));
+  }
+  .flow-node-box{
+    filter:drop-shadow(0 6px 14px rgba(0,0,0,0.35));
+    animation:flowNodeFlash 8s ease-in-out infinite;
+  }
+  @keyframes flowNodeFlash{
+    0%, 92%, 100% { stroke:var(--border); stroke-width:1.5; }
+    4%, 8%        { stroke:var(--ok); stroke-width:2.5; }
+  }
+
+  .flow-metrics{
+    max-width:520px; margin:36px auto 0;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:20px 22px;
+  }
+  .flow-metrics-head{
+    display:flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; letter-spacing:0.08em; text-transform:uppercase;
+    color:var(--text-faint);
+    margin-bottom:16px;
+  }
+  .flow-metrics-dot{ width:9px; height:9px; border-radius:50%; background:var(--ok); flex-shrink:0; box-shadow:0 0 8px rgba(var(--ok-rgb),0.6); }
+  .flow-metrics-grid{ display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; text-align:center; }
+  .flow-metrics-grid strong{
+    display:block;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:26px; font-weight:700; color:var(--ok);
+    line-height:1.1;
+  }
+  .flow-metrics-grid span{
+    display:block; margin-top:4px;
+    font-size:11px; color:var(--text-faint);
+    line-height:1.3;
+  }
+
   /* ---------- ARCHITECTURE DIAGRAM ---------- */
   .diagram-caption{
     color:var(--text-dim);
@@ -694,6 +764,10 @@
     .diagram-desktop{ display:none; }
     .diagram-mobile{ display:block; width:100%; min-width:0; height:auto; }
     .diagram-caption{ font-size:13.5px; }
+
+    .flow-section{ padding:8px 0 48px; }
+    .flow-tilt{ transform:none !important; } /* no mouse to tilt toward on touch */
+    .flow-metrics-grid{ grid-template-columns:repeat(2, 1fr); gap:16px 12px; }
   }
 
   @media (max-width:480px){
@@ -712,6 +786,8 @@
 
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
+    .flow-pulse-dot{ display:none; } /* CSS can't stop the SMIL motion timeline, but it can hide it -- static diagram, no visible movement */
+    .flow-tilt{ transform:none !important; }
   }
 
   /* ---------- SCROLL REVEAL (no-JS-safe: only hides once .js-ready is set) ---------- */
@@ -835,6 +911,115 @@
     <a class="btn primary" href="#projects">View My Work →</a>
     <a class="btn secondary" href="/richard-bonsu-resume.pdf" target="_blank" rel="noopener">View Resume</a>
     <a class="btn secondary" href="https://www.linkedin.com/in/richardbonsu" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</section>
+
+<section class="flow-section" aria-label="Platform engineering workflow">
+  <div class="wrap">
+    <p class="flow-caption"><b>Code</b> → <b>Deploy</b> → <b>Observe</b> → <b>Diagnose</b> — hover any node</p>
+
+    <div class="flow-stage">
+      <div class="flow-tilt" id="flowTilt">
+        <svg class="flow-svg" id="flowSvg" viewBox="0 0 640 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flowTitle flowDesc">
+          <title id="flowTitle">Platform engineering workflow visualization</title>
+          <desc id="flowDesc">A visual representation of the engineering workflow: developer changes flow through GitHub, an AI PR-review agent, Terraform, EKS, Kubernetes, observability tooling, and a read-only Claude Code diagnostic skill. Not a live connection to any production system.</desc>
+
+          <!-- connector path, reused for the traveling pulse's motion -->
+          <path class="flow-line" d="M320,78 L190,118 L190,176 L450,216 L450,282 L190,322 L190,388 L450,428 L450,494 L190,534 L190,592 L450,632 L450,706 L320,746"/>
+          <circle class="flow-pulse-dot" r="5">
+            <animateMotion dur="8s" repeatCount="indefinite" path="M320,78 L190,118 L190,176 L450,216 L450,282 L190,322 L190,388 L450,428 L450,494 L190,534 L190,592 L450,632 L450,706 L320,746"/>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.03;0.97;1" dur="8s" repeatCount="indefinite"/>
+          </circle>
+
+          <!-- 1. Developer -->
+          <g class="flow-node" tabindex="0" role="img" aria-label="Developer — where every change starts">
+            <title>Developer — where every change starts</title>
+            <rect class="dbox flow-node-box" x="190" y="20" width="260" height="58" rx="8" style="animation-delay:-0.4s"/>
+            <svg x="208" y="34" width="18" height="18"><use href="#icon-user"/></svg>
+            <text class="dlabel" x="234" y="47">Developer</text>
+            <text class="dsub" x="234" y="65">where every change starts</text>
+          </g>
+
+          <!-- 2. GitHub / PR -->
+          <g class="flow-node" tabindex="0" role="img" aria-label="GitHub, pull requests opened across 30 repositories">
+            <title>GitHub — pull requests opened across 30 repos</title>
+            <rect class="dbox flow-node-box" x="60" y="118" width="260" height="58" rx="8" style="animation-delay:0.5s"/>
+            <svg x="78" y="132" width="18" height="18"><use href="#icon-flow"/></svg>
+            <text class="dlabel" x="104" y="145">GitHub / Pull Request</text>
+            <text class="dsub" x="104" y="163">30 repos, PR opened</text>
+          </g>
+
+          <!-- 3. CI/CD + AI PR Review -->
+          <g class="flow-node" tabindex="0" role="img" aria-label="CI/CD plus AI PR review, requirement and secret checks on every pull request">
+            <title>CI/CD + AI PR Review — requirement &amp; secret checks, every PR</title>
+            <rect class="dbox-accent flow-node-box" x="320" y="216" width="260" height="66" rx="8" style="animation-delay:1.76s"/>
+            <text class="dtag" x="338" y="236">CLAUDE CODE + JIRA MCP</text>
+            <svg x="338" y="245" width="16" height="16"><use href="#icon-spark"/></svg>
+            <text class="dlabel" x="360" y="257">CI/CD + AI PR Review</text>
+            <text class="dsub" x="338" y="273">requirement &amp; secret checks, every PR</text>
+          </g>
+
+          <!-- 4. Terraform -->
+          <g class="flow-node" tabindex="0" role="img" aria-label="Terraform, reusable modules with per-environment tfvars">
+            <title>Terraform — reusable modules, per-environment tfvars</title>
+            <rect class="dbox flow-node-box" x="60" y="322" width="260" height="66" rx="8" style="animation-delay:2.96s"/>
+            <text class="dtag" x="78" y="342">TERRAFORM</text>
+            <svg x="78" y="351" width="16" height="16"><use href="#icon-box"/></svg>
+            <text class="dlabel" x="100" y="363">Infrastructure as Code</text>
+            <text class="dsub" x="78" y="379">reusable modules, per-env tfvars</text>
+          </g>
+
+          <!-- 5. AWS / EKS -->
+          <g class="flow-node" tabindex="0" role="img" aria-label="AWS EKS, 8 clusters across 3 environments">
+            <title>AWS / EKS — 8 clusters · 3 environments</title>
+            <rect class="dbox-accent flow-node-box" x="320" y="428" width="260" height="66" rx="8" style="animation-delay:4.24s"/>
+            <text class="dtag" x="338" y="448">AWS</text>
+            <svg x="338" y="457" width="16" height="16"><use href="#icon-cloud"/></svg>
+            <text class="dlabel" x="360" y="469">EKS Clusters</text>
+            <text class="dsub" x="338" y="485">8 clusters · 3 environments</text>
+          </g>
+
+          <!-- 6. Kubernetes Platform -->
+          <g class="flow-node" tabindex="0" role="img" aria-label="Kubernetes platform, autoscaling and self-healing via ArgoCD">
+            <title>Kubernetes Platform — autoscaling, self-healing via ArgoCD</title>
+            <rect class="dbox flow-node-box" x="60" y="534" width="260" height="58" rx="8" style="animation-delay:5.44s"/>
+            <svg x="78" y="548" width="18" height="18"><use href="#icon-layers"/></svg>
+            <text class="dlabel" x="104" y="561">Kubernetes Platform</text>
+            <text class="dsub" x="104" y="579">autoscaling, self-heal via ArgoCD</text>
+          </g>
+
+          <!-- 7. Observability -->
+          <g class="flow-node" tabindex="0" role="img" aria-label="Observability, Prometheus Grafana and EFK, production metrics dashboards and centralized logging">
+            <title>Prometheus · Grafana · EFK — production metrics, dashboards, and centralized logging</title>
+            <rect class="dbox-accent flow-node-box" x="320" y="632" width="260" height="74" rx="8" style="animation-delay:6.64s"/>
+            <text class="dtag" x="338" y="652">PROMETHEUS · GRAFANA · EFK</text>
+            <svg x="338" y="661" width="16" height="16"><use href="#icon-pulse"/></svg>
+            <text class="dlabel" x="360" y="673">Observability</text>
+            <text class="dsub" x="338" y="691">metrics, dashboards, centralized logs</text>
+          </g>
+
+          <!-- 8. Claude Code / AI Diagnostics -->
+          <g class="flow-node" tabindex="0" role="img" aria-label="Claude Code AI diagnostics, read-only skill, 20 minute manual investigation reduced to one command">
+            <title>Claude Code — AI-Assisted Diagnostics (read-only): ~20 min manual investigation → 1 command</title>
+            <rect class="dbox-accent flow-node-box" x="190" y="746" width="260" height="74" rx="8" style="animation-delay:7.6s"/>
+            <text class="dtag" x="208" y="766">CLAUDE CODE — READ-ONLY</text>
+            <svg x="208" y="775" width="16" height="16"><use href="#icon-badge"/></svg>
+            <text class="dlabel" x="230" y="787">AI Diagnostics</text>
+            <text class="dsub" x="208" y="805">~20 min manual trace → 1 command</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="flow-metrics">
+      <div class="flow-metrics-head"><span class="flow-metrics-dot"></span>Platform Engineering</div>
+      <div class="flow-metrics-grid">
+        <div><strong>8</strong><span>EKS Clusters</span></div>
+        <div><strong>3</strong><span>Environments</span></div>
+        <div><strong>30</strong><span>Repositories</span></div>
+        <div><strong>45</strong><span>Deploys / Week</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1374,6 +1559,35 @@
     });
 
     closeBtn.addEventListener('click', closePanel);
+  })();
+
+  // Workflow visualization -- mouse-parallax tilt only, gated for touch/reduced-motion.
+  // Everything else (pulse dot motion, per-node flash) is CSS/SMIL and needs no JS at all.
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var stage = document.querySelector('.flow-stage');
+    var tilt = document.getElementById('flowTilt');
+    if(!stage || !tilt || reduce || !canHover) return;
+
+    var MAX_DEG = 4; // small on purpose -- "slight rotation", not a gimmick
+    var raf = null;
+
+    stage.addEventListener('mousemove', function(e){
+      var rect = stage.getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width;  // 0..1
+      var py = (e.clientY - rect.top) / rect.height;  // 0..1
+      var rotY = (px - 0.5) * 2 * MAX_DEG;
+      var rotX = (0.5 - py) * 2 * MAX_DEG;
+      if(raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(function(){
+        tilt.style.transform = 'rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg)';
+      });
+    });
+    stage.addEventListener('mouseleave', function(){
+      if(raf) cancelAnimationFrame(raf);
+      tilt.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    });
   })();
 
   // Accent theme picker -- persisted, no-JS-safe (amber default already set via :root)
