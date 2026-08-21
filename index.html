@@ -752,11 +752,12 @@
       <div class="manifest-body">
         <p>
           Platform engineer with <span class="stat">6 years</span> running production infrastructure — from
-          Hyatt's enterprise AWS environment to an EKS platform at Innovid (<span class="stat">8+ clusters</span>
-          provisioned via Terraform over time), a connected-TV advertising platform. Built the Innovid platform
-          for <span class="stat teal">self-service by design</span>: developers deploy, observe, and debug their
-          own services — no ticket to DevOps required. Builds and runs agentic workflows (Claude Code, custom
-          skills, Jira MCP), PR-gated against production infrastructure across <span class="stat">30 repos</span>.
+          Hyatt's enterprise AWS environment to an <span class="stat">8-cluster EKS platform</span> at Innovid,
+          powering connected-TV advertising. Built the Innovid platform for
+          <span class="stat teal">developer self-service by design</span>: engineers deploy, observe, and debug
+          their own services — no ticket to DevOps required. Builds and runs agentic engineering workflows using
+          Claude Code, custom skills, and Jira MCP, PR-gated against production infrastructure across
+          <span class="stat">30 repositories</span>.
         </p>
       </div>
     </div>
@@ -1013,12 +1014,12 @@
         <div class="log-role">Platform Engineer <span aria-hidden="true" title="current role">🚀</span></div>
         <div class="log-sub">Innovid <span class="sep">·</span> Chicago, IL <span class="sep">·</span> Hybrid</div>
         <ul>
-          <li>Shipped an AI PR-review agent (a customized Claude Code GitHub Action with a Jira MCP integration) across <span class="stat">30 repos</span>, catching requirement gaps and exposed secrets before merge</li>
-          <li>Built log-diagnostics, a Claude Code skill that traced a production OOM-kill in one command, replacing what had been a <span class="stat">20-minute</span> manual Kibana/kubectl dive</li>
-          <li>Provisioned <span class="stat">8+ EKS clusters</span> via Terraform over time, with autoscaling — replacing manual cluster setup</li>
-          <li>Wired up a centralized EFK (Elasticsearch, Fluentd, Kibana) logging platform with S3 archival across <span class="stat">10 services</span>, replacing scattered per-service log access</li>
-          <li>Rolled out workloads through ArgoCD with auto-sync and self-heal enabled, supporting <span class="stat">⚡ 45 deploys/week</span> and eliminating manual deployment steps</li>
-          <li>Set up Prometheus/Grafana alerting on memory/CPU thresholds — caught a sustained memory climb on a production service and resolved it <span class="stat teal">same-day</span>, before it affected customers</li>
+          <li>Engineered an AI-assisted PR review workflow using Claude Code, GitHub Actions, and Jira MCP across <span class="stat">30 repositories</span>, catching missed requirements and exposed secrets before merge</li>
+          <li>Built a Claude Code log-diagnostics skill that correlates Kibana error patterns with live Kubernetes state — collapsed a <span class="stat">20-minute</span> manual trace into one command on a production OOM-kill incident</li>
+          <li>Provisioned and managed <span class="stat">8+ Terraform-managed EKS clusters</span> over time across development, staging, and production, including autoscaling and repeatable cluster rebuilds during infrastructure module changes</li>
+          <li>Designed and operated a centralized EFK logging platform with S3 archival across <span class="stat">10 services</span>, consolidating Kubernetes application and infrastructure logs and enabling full-text search</li>
+          <li>Automated Kubernetes application delivery through ArgoCD and GitOps, sustaining <span class="stat">⚡ 45 deploys/week</span> with automated synchronization and self-healing that eliminated manual deployment steps</li>
+          <li>Caught a sustained memory climb on a production service via Prometheus/Grafana alerting and resolved it <span class="stat teal">same-day</span>, before it affected customers</li>
         </ul>
       </div>
     </div>
@@ -1029,10 +1030,10 @@
         <div class="log-role">Platform Engineer</div>
         <div class="log-sub">Hyatt Hotels Corporation <span class="sep">·</span> Chicago, IL <span class="sep">·</span> Hybrid</div>
         <ul>
-          <li>Automated a GitHub Actions CI/CD pipeline, replacing manual app prep, deployment, and post-deploy validation — cutting deploy time from <span class="stat">30 minutes to 5</span> and making releases consistent</li>
-          <li>Migrated logging off CloudWatch to an EFK stack, adding full-text search across services CloudWatch didn't support</li>
-          <li>Hardened AWS IAM policies across <span class="stat teal">8 roles</span>, removing <span class="stat teal">30% of granted permissions</span> to enforce least privilege and reduce the blast radius of a compromised credential or workload</li>
-          <li>Tuned Grafana alert thresholds to cut noisy, duplicate pages for the same incident</li>
+          <li>Automated application delivery with GitHub Actions, replacing manual application preparation, deployment, and post-deployment validation and reducing deployment time from <span class="stat">30 minutes to 5</span></li>
+          <li>Migrated centralized application logging from CloudWatch to EFK, enabling full-text search and cross-service troubleshooting for production workloads</li>
+          <li>Hardened AWS IAM permissions across application and infrastructure resources using least-privilege principles — removed <span class="stat teal">30% of permissions across 8 roles</span>, shrinking the blast radius of a compromised credential or workload</li>
+          <li>Tuned Grafana monitoring and alerting thresholds to cut noisy, duplicate paging for the same incident</li>
         </ul>
       </div>
     </div>
@@ -1044,28 +1045,36 @@
     <div class="section-head"><svg class="icon"><use href="#icon-layers"/></svg><span class="idx mono">05</span><h2>Stack</h2></div>
     <div class="stack-grid">
       <div class="stack-group">
-        <h3><svg class="icon"><use href="#icon-cloud"/></svg>AWS</h3>
-        <div class="tags"><span>EKS</span><span>EC2</span><span>VPC</span><span>IAM</span><span>S3</span><span>Secrets Manager</span></div>
+        <h3><svg class="icon"><use href="#icon-cloud"/></svg>Cloud</h3>
+        <div class="tags"><span>AWS</span><span>EKS</span><span>EC2</span><span>VPC</span><span>IAM</span><span>Secrets Manager</span><span>S3</span><span>CloudWatch</span></div>
       </div>
       <div class="stack-group">
-        <h3><svg class="icon"><use href="#icon-box"/></svg>Infra &amp; Containers</h3>
-        <div class="tags"><span>Linux</span><span>Docker</span><span>Kubernetes</span></div>
+        <h3><svg class="icon"><use href="#icon-box"/></svg>Containers &amp; Platform</h3>
+        <div class="tags"><span>Kubernetes</span><span>Docker</span><span>Linux</span></div>
       </div>
       <div class="stack-group">
-        <h3><svg class="icon"><use href="#icon-flow"/></svg>IaC &amp; Delivery</h3>
-        <div class="tags"><span>Terraform</span><span>Git</span><span>GitHub Actions</span><span>ArgoCD</span></div>
+        <h3><svg class="icon"><use href="#icon-flow"/></svg>Infrastructure as Code</h3>
+        <div class="tags"><span>Terraform</span></div>
+      </div>
+      <div class="stack-group">
+        <h3><svg class="icon"><use href="#icon-flow"/></svg>CI/CD &amp; GitOps</h3>
+        <div class="tags"><span>GitHub Actions</span><span>ArgoCD</span></div>
       </div>
       <div class="stack-group">
         <h3><svg class="icon"><use href="#icon-pulse"/></svg>Observability</h3>
         <div class="tags"><span>Prometheus</span><span>Grafana</span><span>CloudWatch</span><span>Elasticsearch</span><span>Fluentd</span><span>Kibana</span></div>
       </div>
       <div class="stack-group">
-        <h3><svg class="icon"><use href="#icon-spark"/></svg>AI / Agentic</h3>
-        <div class="tags"><span>Claude Code</span><span>Custom AI Skills</span><span>Jira MCP</span><span>Context Engineering (CLAUDE.md/AGENTS.md)</span><span>AI-Assisted Incident Triage</span></div>
+        <h3><svg class="icon"><use href="#icon-spark"/></svg>AI-Agentic Engineering</h3>
+        <div class="tags"><span>Claude Code</span><span>Custom Agent Skills</span><span>MCP Servers</span><span>CLAUDE.md</span><span>AGENTS.md</span><span>AI-Assisted Incident Investigation</span></div>
       </div>
       <div class="stack-group">
         <h3><svg class="icon"><use href="#icon-terminal"/></svg>Scripting</h3>
         <div class="tags"><span>Bash</span><span>Python</span></div>
+      </div>
+      <div class="stack-group">
+        <h3><svg class="icon"><use href="#icon-terminal"/></svg>Version Control</h3>
+        <div class="tags"><span>Git</span><span>GitHub</span></div>
       </div>
     </div>
   </div>
