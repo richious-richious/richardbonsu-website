@@ -19,18 +19,20 @@
     --text-faint: #6C7796;
     --radius: 4px;
 
-    /* accent system -- overridden per [data-accent] below. Azure is the default. */
-    --ok: #3B82F6;
-    --ok-rgb: 59,130,246;
+    /* accent system -- overridden per [data-accent] below. Amber is the default
+       for every new visitor (no saved preference); a saved choice always wins. */
+    --ok: #FBBF24;
+    --ok-rgb: 251,191,36;
     --ok-dim: rgba(var(--ok-rgb), 0.4); /* re-derives automatically whenever --ok-rgb changes */
   }
 
-  /* Six accent themes -- only --ok/--ok-rgb change, neutrals stay fixed */
+  /* Six accent themes -- only --ok/--ok-rgb change, neutrals stay fixed. Amber
+     matches the :root default above; kept explicit here for clarity/consistency. */
+  [data-accent="amber"]  { --ok: #FBBF24; --ok-rgb: 251,191,36; }
   [data-accent="azure"]  { --ok: #3B82F6; --ok-rgb: 59,130,246; }
   [data-accent="indigo"] { --ok: #818CF8; --ok-rgb: 129,140,248; }
   [data-accent="emerald"]{ --ok: #34D399; --ok-rgb: 52,211,153; }
   [data-accent="cyan"]   { --ok: #22D3EE; --ok-rgb: 34,211,238; }
-  [data-accent="amber"]  { --ok: #FBBF24; --ok-rgb: 251,191,36; }
   [data-accent="rose"]   { --ok: #FB7185; --ok-rgb: 251,113,133; }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
@@ -193,6 +195,16 @@
   .theme-option.active{ color:var(--text); font-weight:600; }
   .theme-option.active::after{ content:"✓"; margin-left:auto; color:var(--ok); font-weight:700; }
   .theme-option .theme-swatch{ box-shadow:none; }
+  .theme-default-tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--text-faint);
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:2px 6px;
+  }
+  .theme-option.active .theme-default-tag{ color:var(--ok); }
 
   /* ---------- HERO / PIPELINE ---------- */
   .hero{
@@ -785,11 +797,11 @@
             <span class="theme-btn-label">🎨 Theme</span>
           </button>
           <div class="theme-menu" id="themeMenu" role="menu">
+            <button class="theme-option" type="button" data-theme="amber" role="menuitem"><span class="theme-swatch" style="background:#FBBF24"></span>Amber<span class="theme-default-tag">default</span></button>
             <button class="theme-option" type="button" data-theme="azure" role="menuitem"><span class="theme-swatch" style="background:#3B82F6"></span>Azure</button>
             <button class="theme-option" type="button" data-theme="indigo" role="menuitem"><span class="theme-swatch" style="background:#818CF8"></span>Indigo</button>
             <button class="theme-option" type="button" data-theme="emerald" role="menuitem"><span class="theme-swatch" style="background:#34D399"></span>Emerald</button>
             <button class="theme-option" type="button" data-theme="cyan" role="menuitem"><span class="theme-swatch" style="background:#22D3EE"></span>Cyan</button>
-            <button class="theme-option" type="button" data-theme="amber" role="menuitem"><span class="theme-swatch" style="background:#FBBF24"></span>Amber</button>
             <button class="theme-option" type="button" data-theme="rose" role="menuitem"><span class="theme-swatch" style="background:#FB7185"></span>Rose</button>
           </div>
         </div>
@@ -1364,9 +1376,10 @@
     closeBtn.addEventListener('click', closePanel);
   })();
 
-  // Accent theme picker -- persisted, no-JS-safe (azure default already set via :root)
+  // Accent theme picker -- persisted, no-JS-safe (amber default already set via :root)
   (function(){
-    var THEMES = ['azure', 'indigo', 'emerald', 'cyan', 'amber', 'rose'];
+    var DEFAULT_THEME = 'amber';
+    var THEMES = ['amber', 'azure', 'indigo', 'emerald', 'cyan', 'rose'];
     var root = document.documentElement;
     var btn = document.getElementById('themeBtn');
     var menu = document.getElementById('themeMenu');
@@ -1374,7 +1387,7 @@
     if(!btn || !menu || !options.length) return;
 
     function applyTheme(name){
-      if(THEMES.indexOf(name) === -1) name = 'azure';
+      if(THEMES.indexOf(name) === -1) name = DEFAULT_THEME;
       root.setAttribute('data-accent', name);
       try { localStorage.setItem('accent', name); } catch(e){ /* storage unavailable, theme just won't persist */ }
       options.forEach(function(opt){
@@ -1382,9 +1395,11 @@
       });
     }
 
+    // saved preference wins if present; first-ever visit (nothing saved, or storage
+    // cleared) falls back to the default -- never the OS/browser color scheme.
     var stored = null;
     try { stored = localStorage.getItem('accent'); } catch(e){}
-    applyTheme(stored || 'azure');
+    applyTheme(stored || DEFAULT_THEME);
 
     function closeMenu(){ menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
     function openMenu(){ menu.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
