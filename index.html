@@ -336,16 +336,21 @@
   .stat{ color:var(--ok); font-weight:600; }
   .stat.teal{ color:var(--text); font-weight:700; } /* secondary emphasis tier -- neutral, not a second hue */
 
-  /* ---------- WORKFLOW VISUALIZATION (hero-adjacent, flat 2D, click-to-open) ---------- */
-  .flow-section{ padding:8px 0 64px; border-bottom:1px solid var(--border); }
+  /* ---------- DIAGRAM NODE PRIMITIVES (shared by the architecture SVG) ---------- */
+  .dbox{ fill:var(--panel-2); stroke:var(--border); stroke-width:1.5; transition:stroke .15s ease, stroke-width .15s ease, fill .15s ease; }
+  .dbox-accent{ fill:var(--panel-2); stroke:var(--ok); stroke-width:1.5; transition:stroke .15s ease, stroke-width .15s ease, fill .15s ease; }
+  .dlabel{ font-family:'IBM Plex Sans', sans-serif; font-size:18px; font-weight:600; fill:var(--text); }
+  .dsub{ font-family:'IBM Plex Mono', monospace; font-size:13px; fill:var(--text-faint); }
+  .dtag{ font-family:'IBM Plex Mono', monospace; font-size:11px; fill:var(--ok); letter-spacing:0.05em; }
+
+  /* ---------- PLATFORM ARCHITECTURE (hero-adjacent, flat 2D, click-to-open) ---------- */
+  .flow-section{ padding:88px 0; border-bottom:1px solid var(--border); }
   .flow-caption{
-    text-align:center;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:13px; letter-spacing:0.08em;
-    color:var(--text-faint);
-    margin-bottom:28px;
+    font-size:14.5px;
+    color:var(--text-dim);
+    margin-bottom:32px;
+    max-width:480px;
   }
-  .flow-caption b{ color:var(--ok); font-weight:600; }
   .flow-stage{ max-width:520px; margin:0 auto; }
   .flow-svg{ display:block; width:100%; height:auto; overflow:visible; }
   .flow-node{ cursor:pointer; outline:none; }
@@ -447,20 +452,20 @@
   .flow-modal-close:hover, .flow-modal-close:focus-visible{ background:rgba(var(--ok-rgb),0.15); color:var(--ok); }
   .flow-modal-tag{
     font-family:'IBM Plex Mono', monospace;
-    font-size:11px; letter-spacing:0.07em; text-transform:uppercase;
+    font-size:13px; letter-spacing:0.06em; text-transform:uppercase;
     color:var(--ok);
     margin-bottom:10px; padding-right:34px;
   }
   .flow-modal h3{
     font-family:'IBM Plex Sans', sans-serif;
-    font-size:22px; font-weight:700; color:var(--text);
+    font-size:23px; font-weight:600; color:var(--text);
     margin-bottom:12px; padding-right:34px;
   }
-  .flow-modal p{ font-size:14.5px; color:var(--text-dim); line-height:1.65; }
+  .flow-modal p{ font-size:15.5px; color:var(--text-dim); line-height:1.6; }
   .flow-modal-outcome{
     margin-top:16px; padding-top:16px;
     border-top:1px solid var(--border);
-    font-size:14px; font-weight:600; color:var(--ok);
+    font-size:15px; font-weight:600; color:var(--ok);
     line-height:1.5;
   }
 
@@ -475,73 +480,12 @@
     .flow-modal-backdrop.open .flow-modal{ transform:translateY(0); }
   }
 
-  /* ---------- ARCHITECTURE DIAGRAM ---------- */
+  /* ---------- shared caption style (used by Projects intro + others) ---------- */
   .diagram-caption{
     color:var(--text-dim);
     font-size:14.5px;
     max-width:620px;
     margin-bottom:28px;
-  }
-  .diagram-frame{
-    background:var(--panel);
-    backdrop-filter:blur(10px);
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:20px;
-    overflow-x:auto;
-    box-shadow:0 20px 50px -20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
-  }
-  .diagram-frame svg{
-    display:block;
-    width:100%;
-    min-width:640px;
-    height:auto;
-  }
-  .diagram-mobile{ display:none; }
-  .diagram-hint{
-    margin-top:10px;
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    color:var(--text-faint);
-    text-align:center;
-  }
-  .diagram-detail{
-    display:none;
-    margin-top:16px;
-    background:var(--panel);
-    border:1px solid var(--ok-dim);
-    border-radius:8px;
-    padding:22px 26px;
-    position:relative;
-    box-shadow:0 14px 32px -18px rgba(0,0,0,0.4);
-  }
-  .diagram-detail.open{ display:block; }
-  .diagram-detail-close{
-    position:absolute; top:12px; right:12px;
-    width:26px; height:26px;
-    border:none; background:var(--panel-2); color:var(--text-dim);
-    border-radius:50%; cursor:pointer; font-size:16px; line-height:1;
-    display:flex; align-items:center; justify-content:center;
-    transition:background .15s ease, color .15s ease;
-  }
-  .diagram-detail-close:hover{ background:var(--ok-dim); color:var(--ok); }
-  .diagram-detail-tag{
-    font-size:11px; color:var(--ok); letter-spacing:0.07em;
-    margin-bottom:8px; padding-right:30px;
-  }
-  .diagram-detail h3{
-    font-family:'IBM Plex Sans', sans-serif;
-    font-size:19px; font-weight:700; color:var(--text);
-    margin-bottom:10px; padding-right:30px;
-  }
-  .diagram-detail p{
-    font-size:14.5px; color:var(--text-dim); line-height:1.6; max-width:660px;
-  }
-  .diagram-detail-outcome{
-    margin-top:14px; padding-top:14px;
-    border-top:1px solid var(--border);
-    font-size:13.5px; font-weight:600; color:var(--ok);
-    line-height:1.55;
   }
 
   /* ---------- SECTION SHELL ---------- */
@@ -829,13 +773,9 @@
     .log-entry{ grid-template-columns:1fr; gap:10px; padding:22px 20px; margin:0 -20px; }
 
     section{ padding:56px 0; }
-    .diagram-frame{ padding:16px; overflow-x:visible; }
-    .diagram-desktop{ display:none; }
-    .diagram-mobile{ display:block; width:100%; min-width:0; height:auto; }
     .diagram-caption{ font-size:13.5px; }
 
-    .flow-section{ padding:8px 0 48px; }
-    .flow-tilt{ transform:none !important; } /* no mouse to tilt toward on touch */
+    .flow-section{ padding:56px 0; }
     .flow-metrics-grid{ grid-template-columns:repeat(2, 1fr); gap:16px 12px; }
   }
 
@@ -856,7 +796,6 @@
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
     .flow-pulse-dot{ display:none; } /* CSS can't stop the SMIL motion timeline, but it can hide it -- static diagram, no visible movement */
-    .flow-tilt{ transform:none !important; }
   }
 
   /* ---------- SCROLL REVEAL (no-JS-safe: only hides once .js-ready is set) ---------- */
@@ -927,8 +866,8 @@
     <nav>
       <div class="brand">RICHARD<span>.</span>BONSU</div>
       <div class="nav-links">
-        <a href="#about">about</a>
         <a href="#architecture">architecture</a>
+        <a href="#about">about</a>
         <a href="#projects">projects</a>
         <a href="#experience">experience</a>
         <a href="#stack">stack</a>
@@ -983,14 +922,15 @@
   </div>
 </section>
 
-<section class="flow-section" aria-label="Platform engineering workflow">
+<section id="architecture" class="flow-section reveal" aria-label="Platform Architecture">
   <div class="wrap">
-    <p class="flow-caption"><b>Code</b> → <b>Review</b> → <b>Infrastructure</b> → <b>Deploy</b> → <b>Observe</b> → <b>Diagnose</b> — click any node</p>
+    <div class="section-head"><svg class="icon"><use href="#icon-flow"/></svg><span class="idx mono">01</span><h2>Platform Architecture</h2></div>
+    <p class="flow-caption">From code to production — and from alerts to diagnosis. Click any node.</p>
 
     <div class="flow-stage">
-      <svg class="flow-svg" id="flowSvg" viewBox="0 0 640 750" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flowTitle flowDesc">
-        <title id="flowTitle">Platform engineering workflow visualization</title>
-        <desc id="flowDesc">A visual representation of the engineering workflow: developer changes flow through GitHub, an AI PR-review agent, Terraform, EKS, observability tooling, and a read-only Claude Code diagnostic skill. Not a live connection to any production system. Click any node for detail.</desc>
+      <svg class="flow-svg" id="flowSvg" viewBox="0 0 640 840" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="flowTitle flowDesc">
+        <title id="flowTitle">Platform architecture visualization</title>
+        <desc id="flowDesc">A visual representation of the engineering workflow: developer changes flow through GitHub, an AI PR-review agent, Terraform, EKS across dev/staging/prod, observability tooling, and a read-only Claude Code diagnostic skill. Not a live connection to any production system. Click any node for detail.</desc>
 
         <!-- visible connector segments -- one per hop, individually highlightable -->
         <path class="flow-line" data-seg="2" d="M320,78 L190,118"/>
@@ -998,73 +938,81 @@
         <path class="flow-line" data-seg="4" d="M450,282 L190,322"/>
         <path class="flow-line" data-seg="5" d="M190,388 L450,428"/>
         <path class="flow-line" data-seg="6" d="M450,494 L190,534"/>
-        <path class="flow-line" data-seg="7" d="M190,608 L320,648"/>
+        <path class="flow-line" data-seg="7" d="M190,592 L450,632"/>
+        <path class="flow-line" data-seg="8" d="M450,698 L320,738"/>
 
         <!-- traveling pulse -- full path incl. pass-through segments hidden behind each node's own box -->
         <circle class="flow-pulse-dot" r="5">
-          <animateMotion dur="11s" repeatCount="indefinite" path="M320,78 L190,118 L190,176 L450,216 L450,282 L190,322 L190,388 L450,428 L450,494 L190,534 L190,608 L320,648"/>
+          <animateMotion dur="11s" repeatCount="indefinite" path="M320,78 L190,118 L190,176 L450,216 L450,282 L190,322 L190,388 L450,428 L450,494 L190,534 L190,592 L450,632 L450,698 L320,738"/>
           <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.02;0.98;1" dur="11s" repeatCount="indefinite"/>
         </circle>
 
         <!-- 1. Developer -->
         <g class="flow-node" data-flow="developer" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Developer. Click for detail.">
-          <rect class="dbox flow-node-box" x="190" y="20" width="260" height="58" rx="8" style="animation-delay:-0.3s"/>
+          <rect class="dbox flow-node-box" x="190" y="20" width="260" height="58" rx="8" style="animation-delay:-0.6s"/>
           <svg x="208" y="34" width="18" height="18"><use href="#icon-user"/></svg>
-          <text class="dlabel" x="234" y="47">Developer</text>
-          <text class="dsub" x="234" y="65">where every change starts</text>
+          <text class="dlabel" x="234" y="55">Developer</text>
         </g>
 
         <!-- 2. GitHub / PR -->
         <g class="flow-node" data-flow="github" tabindex="0" role="button" aria-haspopup="dialog" aria-label="GitHub, Pull Request. Click for detail.">
-          <rect class="dbox flow-node-box" x="60" y="118" width="260" height="58" rx="8" style="animation-delay:1.2s"/>
+          <rect class="dbox flow-node-box" x="60" y="118" width="260" height="58" rx="8" style="animation-delay:0.67s"/>
           <svg x="78" y="132" width="18" height="18"><use href="#icon-flow"/></svg>
-          <text class="dlabel" x="104" y="145">GitHub / Pull Request</text>
-          <text class="dsub" x="104" y="163">30 repos, PR-gated</text>
+          <text class="dlabel" x="104" y="153">GitHub / PR</text>
+          <text class="dsub" x="104" y="169">30 repos, PR-gated</text>
         </g>
 
-        <!-- 3. CI/CD + AI PR Review -->
-        <g class="flow-node" data-flow="cicd" tabindex="0" role="button" aria-haspopup="dialog" aria-label="CI/CD plus AI PR Review. Click for detail.">
-          <rect class="dbox-accent flow-node-box" x="320" y="216" width="260" height="66" rx="8" style="animation-delay:3.2s"/>
+        <!-- 3. CI/CD + AI Review -->
+        <g class="flow-node" data-flow="cicd" tabindex="0" role="button" aria-haspopup="dialog" aria-label="CI/CD plus AI Review. Click for detail.">
+          <rect class="dbox-accent flow-node-box" x="320" y="216" width="260" height="66" rx="8" style="animation-delay:2.36s"/>
           <text class="dtag" x="338" y="236">CLAUDE CODE + JIRA MCP</text>
           <svg x="338" y="245" width="16" height="16"><use href="#icon-spark"/></svg>
-          <text class="dlabel" x="360" y="257">CI/CD + AI Review</text>
-          <text class="dsub" x="338" y="273">requirement &amp; secret checks, every PR</text>
+          <text class="dlabel" x="360" y="259">CI/CD + AI Review</text>
+          <text class="dsub" x="338" y="275">AI-reviewed before merge</text>
         </g>
 
         <!-- 4. Terraform -->
         <g class="flow-node" data-flow="terraform" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Terraform. Click for detail.">
-          <rect class="dbox flow-node-box" x="60" y="322" width="260" height="66" rx="8" style="animation-delay:5.2s"/>
+          <rect class="dbox flow-node-box" x="60" y="322" width="260" height="66" rx="8" style="animation-delay:4.05s"/>
           <text class="dtag" x="78" y="342">TERRAFORM</text>
           <svg x="78" y="351" width="16" height="16"><use href="#icon-box"/></svg>
-          <text class="dlabel" x="100" y="363">Infrastructure as Code</text>
-          <text class="dsub" x="78" y="379">reusable modules, per-env tfvars</text>
+          <text class="dlabel" x="100" y="365">Terraform</text>
+          <text class="dsub" x="78" y="381">Infrastructure as Code</text>
         </g>
 
-        <!-- 5. AWS / EKS (incl. dev/staging/prod) -->
+        <!-- 5. AWS / EKS -->
         <g class="flow-node" data-flow="eks" tabindex="0" role="button" aria-haspopup="dialog" aria-label="AWS EKS. Click for detail.">
-          <rect class="dbox-accent flow-node-box" x="320" y="428" width="260" height="66" rx="8" style="animation-delay:7.2s"/>
-          <text class="dtag" x="338" y="448">AWS · DEV / STAGING / PROD</text>
+          <rect class="dbox-accent flow-node-box" x="320" y="428" width="260" height="66" rx="8" style="animation-delay:5.75s"/>
+          <text class="dtag" x="338" y="448">AWS</text>
           <svg x="338" y="457" width="16" height="16"><use href="#icon-cloud"/></svg>
-          <text class="dlabel" x="360" y="469">EKS Clusters</text>
-          <text class="dsub" x="338" y="485">8 clusters · 3 environments</text>
+          <text class="dlabel" x="360" y="471">AWS / EKS</text>
+          <text class="dsub" x="338" y="487">8 EKS clusters</text>
         </g>
 
-        <!-- 6. Observability -->
+        <!-- 6. Dev / Staging / Prod -->
+        <g class="flow-node" data-flow="envs" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Dev, Staging, Production. Click for detail.">
+          <rect class="dbox flow-node-box" x="60" y="534" width="260" height="58" rx="8" style="animation-delay:7.44s"/>
+          <svg x="78" y="548" width="18" height="18"><use href="#icon-layers"/></svg>
+          <text class="dlabel" x="104" y="569">Dev · Staging · Prod</text>
+          <text class="dsub" x="104" y="585">3 environments</text>
+        </g>
+
+        <!-- 7. Observability -->
         <g class="flow-node" data-flow="observability" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Observability, Prometheus Grafana EFK. Click for detail.">
-          <rect class="dbox flow-node-box" x="60" y="534" width="260" height="74" rx="8" style="animation-delay:9.2s"/>
-          <text class="dtag" x="78" y="554">PROMETHEUS · GRAFANA · EFK</text>
-          <svg x="78" y="563" width="16" height="16"><use href="#icon-pulse"/></svg>
-          <text class="dlabel" x="100" y="575">Observability</text>
-          <text class="dsub" x="78" y="593">metrics, dashboards, centralized logs</text>
+          <rect class="dbox-accent flow-node-box" x="320" y="632" width="260" height="66" rx="8" style="animation-delay:9.13s"/>
+          <text class="dtag" x="338" y="652">PROMETHEUS · GRAFANA · EFK</text>
+          <svg x="338" y="661" width="16" height="16"><use href="#icon-pulse"/></svg>
+          <text class="dlabel" x="360" y="675">Observability</text>
+          <text class="dsub" x="338" y="691">metrics · dashboards · logs</text>
         </g>
 
-        <!-- 7. Claude Code / AI Diagnostics -->
-        <g class="flow-node" data-flow="claude" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Claude Code AI Diagnostics. Click for detail.">
-          <rect class="dbox-accent flow-node-box" x="190" y="648" width="260" height="74" rx="8" style="animation-delay:10.7s"/>
-          <text class="dtag" x="208" y="668">CLAUDE CODE — READ-ONLY</text>
-          <svg x="208" y="677" width="16" height="16"><use href="#icon-badge"/></svg>
-          <text class="dlabel" x="230" y="689">AI Diagnostics</text>
-          <text class="dsub" x="208" y="707">~20 min manual trace → 1 command</text>
+        <!-- 8. Claude Code -->
+        <g class="flow-node" data-flow="claude" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Claude Code. Click for detail.">
+          <rect class="dbox-accent flow-node-box" x="190" y="738" width="260" height="66" rx="8" style="animation-delay:10.4s"/>
+          <text class="dtag" x="208" y="758">CLAUDE CODE — READ-ONLY</text>
+          <svg x="208" y="767" width="16" height="16"><use href="#icon-badge"/></svg>
+          <text class="dlabel" x="230" y="781">Claude Code</text>
+          <text class="dsub" x="208" y="797">~20 min → 1 command</text>
         </g>
       </svg>
     </div>
@@ -1094,7 +1042,7 @@
 
 <section id="about" class="reveal">
   <div class="wrap">
-    <div class="section-head"><svg class="icon"><use href="#icon-user"/></svg><span class="idx mono">01</span><h2>About</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-user"/></svg><span class="idx mono">02</span><h2>About</h2></div>
     <div class="manifest">
       <div class="manifest-head">
         <span><b>service:</b> richard-bonsu</span>
@@ -1111,210 +1059,6 @@
           Claude Code, custom skills, and Jira MCP, PR-gated against production infrastructure across
           <span class="stat">30 repositories</span>.
         </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="architecture" class="reveal">
-  <div class="wrap">
-    <div class="section-head"><svg class="icon"><use href="#icon-flow"/></svg><span class="idx mono">02</span><h2>Platform Architecture</h2></div>
-    <p class="diagram-caption">How a change gets from a pull request to running in production — the platform I built and run at Innovid.</p>
-
-    <div class="diagram-frame">
-      <svg class="diagram-desktop" viewBox="0 0 1100 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagTitle diagDesc">
-        <title id="diagTitle">Platform architecture diagram</title>
-        <desc id="diagDesc">Pull requests reviewed by an AI agent, gating Terraform modules that provision dev, staging, and prod EKS clusters. Each cluster runs ArgoCD, an EFK logging stack with S3 archival, and Prometheus alerting. A read-only Claude Code skill reads the EFK stack for diagnostics.</desc>
-        <style>
-          .dbox{ fill:var(--panel-2); stroke:var(--border); stroke-width:1.5; transition:stroke .15s ease, stroke-width .15s ease, fill .15s ease; }
-          .dbox-accent{ fill:var(--panel-2); stroke:var(--ok); stroke-width:1.5; transition:stroke .15s ease, stroke-width .15s ease, fill .15s ease; }
-          .dlabel{ font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:600; fill:var(--text); }
-          .dsub{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; fill:var(--text-faint); }
-          .dtag{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; fill:var(--ok); letter-spacing:0.06em; }
-          .dline{ stroke:var(--border); stroke-width:1.5; fill:none; }
-          .dline-accent{ stroke:var(--ok); stroke-width:1.5; fill:none; stroke-dasharray:4 4; }
-          .dnode{ cursor:pointer; outline:none; }
-          .dnode:hover .dbox, .dnode:hover .dbox-accent{ stroke:var(--ok); stroke-width:2; }
-          .dnode:focus-visible .dbox, .dnode:focus-visible .dbox-accent{ stroke:var(--ok); stroke-width:2.5; }
-          .dnode.active .dbox, .dnode.active .dbox-accent{ fill:rgba(var(--ok-rgb),0.07); stroke:var(--ok); stroke-width:2.5; }
-        </style>
-
-        <!-- Row 0: GitHub repos -> PR review agent -->
-        <g class="dnode" data-node="github" tabindex="0" role="button" aria-label="GitHub — 30 repos. Click for detail.">
-          <rect class="dbox" x="40" y="24" width="220" height="64" rx="6"/>
-          <text class="dlabel" x="60" y="52">GitHub — 30 repos</text>
-          <text class="dsub" x="60" y="70">pull requests opened</text>
-        </g>
-
-        <path class="dline" d="M260,56 H420"/>
-        <polygon points="420,56 410,51 410,61" fill="var(--border)"/>
-
-        <g class="dnode" data-node="pr-review" tabindex="0" role="button" aria-label="AI PR-review agent. Click for detail.">
-          <rect class="dbox-accent" x="420" y="24" width="280" height="64" rx="6"/>
-          <text class="dtag" x="440" y="42">CLAUDE CODE + JIRA MCP</text>
-          <text class="dlabel" x="440" y="60">PR-review agent</text>
-          <text class="dsub" x="440" y="76">catches gaps &amp; exposed secrets pre-merge</text>
-        </g>
-
-        <path class="dline" d="M560,88 V130"/>
-        <polygon points="560,130 555,120 565,120" fill="var(--border)"/>
-
-        <!-- Row 1: Terraform modules -->
-        <g class="dnode" data-node="terraform" tabindex="0" role="button" aria-label="Terraform reusable modules. Click for detail.">
-          <rect class="dbox" x="400" y="130" width="320" height="64" rx="6"/>
-          <text class="dtag" x="420" y="150">TERRAFORM</text>
-          <text class="dlabel" x="420" y="168">Reusable modules · per-env tfvars</text>
-          <text class="dsub" x="420" y="184">rewritten to remove config drift</text>
-        </g>
-
-        <!-- fan-out lines to 3 clusters -->
-        <path class="dline" d="M480,194 V230 H180 V262"/>
-        <path class="dline" d="M560,194 V262"/>
-        <path class="dline" d="M640,194 V230 H940 V262"/>
-        <polygon points="180,262 175,252 185,252" fill="var(--border)"/>
-        <polygon points="560,262 555,252 565,252" fill="var(--border)"/>
-        <polygon points="940,262 935,252 945,252" fill="var(--border)"/>
-
-        <!-- Row 2: three clusters -->
-        <g class="dnode" data-node="eks" tabindex="0" role="button" aria-label="EKS dev, staging, and prod clusters. Click for detail.">
-          <rect class="dbox" x="70" y="262" width="220" height="58" rx="6"/>
-          <text class="dlabel" x="90" y="288">EKS — dev</text>
-          <text class="dsub" x="90" y="306">validation-first</text>
-        </g>
-
-        <g class="dnode" data-node="eks" tabindex="0" role="button" aria-label="EKS dev, staging, and prod clusters. Click for detail.">
-          <rect class="dbox" x="450" y="262" width="220" height="58" rx="6"/>
-          <text class="dlabel" x="470" y="288">EKS — staging</text>
-          <text class="dsub" x="470" y="306">pre-prod parity</text>
-        </g>
-
-        <g class="dnode" data-node="eks" tabindex="0" role="button" aria-label="EKS dev, staging, and prod clusters. Click for detail.">
-          <rect class="dbox-accent" x="830" y="262" width="220" height="58" rx="6"/>
-          <text class="dtag" x="850" y="280">LIVE</text>
-          <text class="dlabel" x="850" y="298">EKS — prod</text>
-          <text class="dsub" x="850" y="314">10 services</text>
-        </g>
-
-        <!-- converge into platform layer -->
-        <path class="dline" d="M180,320 V352 H550 V368"/>
-        <path class="dline" d="M560,320 V368"/>
-        <path class="dline" d="M940,320 V352 H570 V368"/>
-        <polygon points="560,368 555,358 565,358" fill="var(--border)"/>
-
-        <!-- Row 3: platform layer -->
-        <g class="dnode" data-node="argocd" tabindex="0" role="button" aria-label="ArgoCD GitOps delivery. Click for detail.">
-          <rect class="dbox" x="110" y="368" width="240" height="70" rx="6"/>
-          <text class="dlabel" x="130" y="396">ArgoCD</text>
-          <text class="dsub" x="130" y="414">auto-sync + self-heal deploys</text>
-        </g>
-
-        <g class="dnode" data-node="efk" tabindex="0" role="button" aria-label="EFK plus S3 centralized logging. Click for detail.">
-          <rect class="dbox" x="430" y="368" width="240" height="70" rx="6"/>
-          <text class="dlabel" x="450" y="396">EFK + S3</text>
-          <text class="dsub" x="450" y="414">centralized logs, archived</text>
-        </g>
-
-        <g class="dnode" data-node="prometheus" tabindex="0" role="button" aria-label="Prometheus and Grafana alerting. Click for detail.">
-          <rect class="dbox" x="750" y="368" width="240" height="70" rx="6"/>
-          <text class="dlabel" x="770" y="396">Prometheus</text>
-          <text class="dsub" x="770" y="414">CPU/memory alerting</text>
-        </g>
-
-        <!-- EFK -> AI diagnostics -->
-        <path class="dline-accent" d="M550,438 V480 H560 V510"/>
-        <polygon points="560,510 555,500 565,500" fill="var(--ok)"/>
-
-        <!-- Row 4: AI diagnostics -->
-        <g class="dnode" data-node="log-diagnostics" tabindex="0" role="button" aria-label="log-diagnostics Claude Code skill. Click for detail.">
-          <rect class="dbox-accent" x="380" y="510" width="360" height="72" rx="6"/>
-          <text class="dtag" x="400" y="530">CLAUDE CODE — READ-ONLY</text>
-          <text class="dlabel" x="400" y="550">log-diagnostics skill</text>
-          <text class="dsub" x="400" y="568">20-min Kibana/kubectl dive → one command</text>
-        </g>
-
-        <!-- legend -->
-        <text class="dsub" x="400" y="612">— — — AI-agent path</text>
-        <text class="dsub" x="400" y="628">─── infra provisioning path</text>
-      </svg>
-
-      <!-- Mobile: same 8 real nodes, stacked single-column, larger relative text -->
-      <svg class="diagram-mobile" viewBox="0 0 340 690" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagTitleM diagDescM">
-        <title id="diagTitleM">Platform architecture diagram (mobile)</title>
-        <desc id="diagDescM">Pull requests reviewed by an AI agent, gating Terraform modules that provision the EKS clusters. Each cluster runs ArgoCD, an EFK logging stack with S3 archival, and Prometheus alerting. A read-only Claude Code skill reads the EFK stack for diagnostics.</desc>
-
-        <g class="dnode" data-node="github" tabindex="0" role="button" aria-label="GitHub — 30 repos. Click for detail.">
-          <rect class="dbox" x="20" y="16" width="300" height="56" rx="6"/>
-          <text class="dlabel" x="36" y="42">GitHub — 30 repos</text>
-          <text class="dsub" x="36" y="60">pull requests opened</text>
-        </g>
-        <path class="dline" d="M170,72 V92"/>
-        <polygon points="170,92 165,82 175,82" fill="var(--border)"/>
-
-        <g class="dnode" data-node="pr-review" tabindex="0" role="button" aria-label="AI PR-review agent. Click for detail.">
-          <rect class="dbox-accent" x="20" y="92" width="300" height="70" rx="6"/>
-          <text class="dtag" x="36" y="112">CLAUDE CODE + JIRA MCP</text>
-          <text class="dlabel" x="36" y="132">PR-review agent</text>
-          <text class="dsub" x="36" y="150">catches gaps &amp; secrets pre-merge</text>
-        </g>
-        <path class="dline" d="M170,162 V182"/>
-        <polygon points="170,182 165,172 175,172" fill="var(--border)"/>
-
-        <g class="dnode" data-node="terraform" tabindex="0" role="button" aria-label="Terraform reusable modules. Click for detail.">
-          <rect class="dbox" x="20" y="182" width="300" height="70" rx="6"/>
-          <text class="dtag" x="36" y="202">TERRAFORM</text>
-          <text class="dlabel" x="36" y="222">Reusable modules · per-env tfvars</text>
-          <text class="dsub" x="36" y="240">rewritten to remove config drift</text>
-        </g>
-        <path class="dline" d="M170,252 V272"/>
-        <polygon points="170,272 165,262 175,262" fill="var(--border)"/>
-
-        <g class="dnode" data-node="eks" tabindex="0" role="button" aria-label="EKS dev, staging, and prod clusters. Click for detail.">
-          <rect class="dbox-accent" x="20" y="272" width="300" height="64" rx="6"/>
-          <text class="dtag" x="36" y="290">LIVE — DEV / STAGING / PROD</text>
-          <text class="dlabel" x="36" y="308">EKS clusters</text>
-          <text class="dsub" x="36" y="326">10 services, autoscaling</text>
-        </g>
-        <path class="dline" d="M170,336 V356"/>
-        <polygon points="170,356 165,346 175,346" fill="var(--border)"/>
-
-        <g class="dnode" data-node="argocd" tabindex="0" role="button" aria-label="ArgoCD GitOps delivery. Click for detail.">
-          <rect class="dbox" x="20" y="356" width="300" height="54" rx="6"/>
-          <text class="dlabel" x="36" y="380">ArgoCD</text>
-          <text class="dsub" x="36" y="398">auto-sync + self-heal deploys</text>
-        </g>
-
-        <g class="dnode" data-node="efk" tabindex="0" role="button" aria-label="EFK plus S3 centralized logging. Click for detail.">
-          <rect class="dbox" x="20" y="418" width="300" height="54" rx="6"/>
-          <text class="dlabel" x="36" y="442">EFK + S3</text>
-          <text class="dsub" x="36" y="460">centralized logs, archived</text>
-        </g>
-
-        <g class="dnode" data-node="prometheus" tabindex="0" role="button" aria-label="Prometheus and Grafana alerting. Click for detail.">
-          <rect class="dbox" x="20" y="480" width="300" height="54" rx="6"/>
-          <text class="dlabel" x="36" y="504">Prometheus</text>
-          <text class="dsub" x="36" y="522">CPU/memory alerting</text>
-        </g>
-        <path class="dline-accent" d="M170,534 V554"/>
-        <polygon points="170,554 165,544 175,544" fill="var(--ok)"/>
-
-        <g class="dnode" data-node="log-diagnostics" tabindex="0" role="button" aria-label="log-diagnostics Claude Code skill. Click for detail.">
-          <rect class="dbox-accent" x="20" y="554" width="300" height="70" rx="6"/>
-          <text class="dtag" x="36" y="574">CLAUDE CODE — READ-ONLY</text>
-          <text class="dlabel" x="36" y="594">log-diagnostics skill</text>
-          <text class="dsub" x="36" y="612">reads the EFK stack, one command</text>
-        </g>
-
-        <text class="dsub" x="20" y="656">— — — AI-agent path</text>
-        <text class="dsub" x="20" y="672">─── infra provisioning path</text>
-      </svg>
-      <p class="diagram-hint">Click any node for how it was actually built →</p>
-
-      <div class="diagram-detail" id="diagramDetail">
-        <button class="diagram-detail-close" id="diagramDetailClose" aria-label="Close detail">&times;</button>
-        <div class="diagram-detail-tag mono" id="diagramDetailTag"></div>
-        <h3 id="diagramDetailTitle"></h3>
-        <p id="diagramDetailDesc"></p>
-        <div class="diagram-detail-outcome" id="diagramDetailOutcome"></div>
       </div>
     </div>
   </div>
@@ -1530,143 +1274,48 @@
     targets.forEach(function(t){ io.observe(t); });
   })();
 
-  // Architecture diagram — interactive nodes
-  (function(){
-    var NODE_INFO = {
-      'github': {
-        tag: 'GITHUB ACTIONS',
-        title: 'GitHub — 30 repos',
-        desc: 'Every pull request opened across 30 repos — 2 product teams plus the platform team — triggers the same review pipeline before a human looks at it.',
-        outcome: ''
-      },
-      'pr-review': {
-        tag: 'CLAUDE CODE + JIRA MCP',
-        title: 'AI PR-review agent',
-        desc: 'A customized Claude Code GitHub Action, triggered only when a PR opens (cost efficiency — not on every push). It pulls the linked Jira ticket through a Jira MCP server — a real API call, not pasted ticket text — and compares what was asked against what was delivered, plus scans for exposed secrets. Posts findings as PR comments; advisory only, no merge gate.',
-        outcome: 'Caught real requirement gaps and exposed secrets before merge — across 30 repos, every PR.'
-      },
-      'terraform': {
-        tag: 'TERRAFORM',
-        title: 'Reusable modules, per-environment tfvars',
-        desc: 'The EKS module used to be one shared file across dev, staging, and prod — and it drifted, because one-off manual fixes made directly to a live environment never made it back into the module. Rewrote it into reusable modules with per-environment tfvars, so an environment’s entire config lives in one file with nothing hand-edited outside it.',
-        outcome: 'Validated on 2 throwaway environments — clean build, clean teardown — before the same module ever touched prod.'
-      },
-      'eks': {
-        tag: 'KUBERNETES',
-        title: 'EKS — dev / staging / prod',
-        desc: '3 clusters stand today, one per environment, all provisioned by the same Terraform module. Counting the throwaway validation environments and rebuilds during the module rewrite, 8+ clusters have been provisioned via Terraform over time — worth keeping "standing" and "provisioned" straight if asked which number is which.',
-        outcome: 'Autoscaling on all three — replaced manual cluster setup entirely.'
-      },
-      'argocd': {
-        tag: 'GITOPS',
-        title: 'ArgoCD',
-        desc: 'Auto-sync and self-heal enabled — a drift between what’s in Git and what’s actually running gets corrected automatically instead of paged on.',
-        outcome: 'Sustains 45 deploys/week with no manual deployment steps.'
-      },
-      'efk': {
-        tag: 'ELASTICSEARCH · FLUENTD · KIBANA',
-        title: 'EFK + S3',
-        desc: 'Fluentd ships logs off every pod to Elasticsearch — the only way logs stay searchable once you’re past a handful of services. Kibana sits on top as the query layer; older logs age out to S3 for cheaper, compliant retention.',
-        outcome: 'Centralized log search across 10 services, replacing scattered per-service access.'
-      },
-      'prometheus': {
-        tag: 'PROMETHEUS + GRAFANA',
-        title: 'Prometheus alerting',
-        desc: 'Scrapes node and pod metrics, alerting on memory and CPU thresholds. Grafana confirms the trend — sustained climb vs. a one-off spike — before anyone acts on it.',
-        outcome: 'Caught a sustained memory climb on a production service and resolved it same-day, before it affected customers.'
-      },
-      'log-diagnostics': {
-        tag: 'CLAUDE CODE — READ-ONLY',
-        title: 'log-diagnostics skill',
-        desc: 'On demand, it queries Kibana for error patterns and cross-references live kubectl pod/deployment state, then returns a ranked root-cause candidate instead of a wall of raw logs. Read-only by design, no cluster mutation — it surfaces a candidate, a human confirms and acts.',
-        outcome: 'Collapsed a 20-minute manual Kibana/kubectl trace into one command, verified on a production OOM-kill incident.'
-      }
-    };
-
-    var nodes = document.querySelectorAll('.dnode');
-    if(!nodes.length) return;
-
-    var panel = document.getElementById('diagramDetail');
-    var tagEl = document.getElementById('diagramDetailTag');
-    var titleEl = document.getElementById('diagramDetailTitle');
-    var descEl = document.getElementById('diagramDetailDesc');
-    var outcomeEl = document.getElementById('diagramDetailOutcome');
-    var closeBtn = document.getElementById('diagramDetailClose');
-    var activeId = null;
-
-    function closePanel(){
-      panel.classList.remove('open');
-      nodes.forEach(function(n){ n.classList.remove('active'); });
-      activeId = null;
-    }
-
-    function openNode(id){
-      var info = NODE_INFO[id];
-      if(!info) return;
-      tagEl.textContent = info.tag || '';
-      titleEl.textContent = info.title;
-      descEl.textContent = info.desc;
-      outcomeEl.textContent = info.outcome || '';
-      outcomeEl.style.display = info.outcome ? 'block' : 'none';
-      nodes.forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-node') === id); });
-      panel.classList.add('open');
-      activeId = id;
-      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    nodes.forEach(function(n){
-      var id = n.getAttribute('data-node');
-      n.addEventListener('click', function(){
-        if(activeId === id){ closePanel(); } else { openNode(id); }
-      });
-      n.addEventListener('keydown', function(e){
-        if(e.key === 'Enter' || e.key === ' '){
-          e.preventDefault();
-          if(activeId === id){ closePanel(); } else { openNode(id); }
-        }
-      });
-    });
-
-    closeBtn.addEventListener('click', closePanel);
-  })();
-
   // Workflow visualization -- click-to-open popups. Pulse motion and per-node
   // flash are pure CSS/SMIL and need no JS; this only handles the modal.
   (function(){
     var FLOW_INFO = {
       developer: {
         seg: null, tag: 'DEVELOPER', title: 'Developer Self-Service',
-        body: 'Designed the platform so developers could deploy, observe, and debug their own services without routine DevOps tickets — not unrestricted infrastructure access, but a self-service path for the day-to-day.',
+        body: 'Deploy, observe, and debug your own services — no DevOps ticket required for the day-to-day.',
         outcome: ''
       },
       github: {
-        seg: 2, tag: 'GITHUB · 30 REPOS', title: 'PR-Gated Engineering Workflow',
-        body: 'Every infrastructure and application change ships through a pull request. An AI review agent checks each PR against its linked Jira ticket and scans for exposed secrets before a human looks at it — running across all 30 repositories the platform covers.',
-        outcome: ''
+        seg: 2, tag: 'GITHUB · 30 REPOS', title: 'PR-Gated Workflow',
+        body: 'Every change ships through a pull request. An AI agent reviews it before a human does.',
+        outcome: '30 repositories'
       },
       cicd: {
         seg: 3, tag: 'CLAUDE CODE + JIRA MCP', title: 'Automated Delivery & AI Review',
-        body: 'Automated delivery workflows and a Claude Code–based PR review agent integrated with Jira MCP — pulling the linked ticket through a real API call, not pasted text, and comparing what was asked against what was delivered.',
+        body: 'A Claude Code agent checks each PR against its linked Jira ticket — a real API call through MCP — and scans for exposed secrets before merge.',
         outcome: 'Catches missed requirements and exposed secrets before merge.'
       },
       terraform: {
         seg: 4, tag: 'TERRAFORM', title: 'Infrastructure as Code',
-        body: 'Provisioned EKS infrastructure through Terraform, with infrastructure changes managed through pull requests — reusable modules with per-environment tfvars, so an environment’s config lives in one place.',
-        outcome: 'Config drift eliminated structurally, not chased down after the fact.'
+        body: 'Repeatable AWS/EKS provisioning. Reusable modules with per-environment tfvars — one config source per environment, changed only through pull requests.',
+        outcome: 'Config drift eliminated structurally.'
       },
       eks: {
-        seg: 5, tag: 'AWS · DEV / STAGING / PROD', title: 'Kubernetes Platform',
-        body: 'Runs Kubernetes workloads across three environments — development, staging, and production — provisioned and managed through the same Terraform module, with autoscaling in place.',
-        outcome: '8 EKS clusters · 3 environments'
+        seg: 5, tag: 'AWS', title: 'AWS / EKS',
+        body: 'Kubernetes clusters provisioned and autoscaled via Terraform.',
+        outcome: '8 EKS clusters'
+      },
+      envs: {
+        seg: 6, tag: 'DEV · STAGING · PROD', title: 'Dev · Staging · Prod',
+        body: 'The same Terraform module provisions all three environments — no manual cluster setup.',
+        outcome: '3 environments'
       },
       observability: {
-        seg: 6, tag: 'PROMETHEUS · GRAFANA · EFK', title: 'Observability',
-        body: 'Prometheus alerts on memory and CPU thresholds; Grafana confirms the trend before anyone acts on it. A centralized EFK stack with S3 archival replaces scattered per-service log access.',
+        seg: 7, tag: 'PROMETHEUS · GRAFANA · EFK', title: 'Observability',
+        body: 'Prometheus alerts on memory/CPU. Grafana confirms the trend before anyone acts. EFK centralizes logs with S3 archival.',
         outcome: ''
       },
       claude: {
-        seg: 7, tag: 'CLAUDE CODE — READ-ONLY', title: 'AI-Assisted Diagnostics',
-        body: 'A read-only Claude Code skill investigates Kubernetes and application logs — correlating Kibana error patterns with live kubectl state to surface a ranked root cause. It never modifies production; a human always confirms and acts.',
+        seg: 8, tag: 'CLAUDE CODE — READ-ONLY', title: 'AI-Assisted Diagnostics',
+        body: 'A read-only skill correlating Kibana errors with live kubectl state to surface a root cause. Never modifies production — a human always confirms and acts.',
         outcome: '~20-minute manual investigation → 1 command'
       }
     };
