@@ -281,6 +281,51 @@
     min-width:640px;
     height:auto;
   }
+  .diagram-hint{
+    margin-top:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--text-faint);
+    text-align:center;
+  }
+  .diagram-detail{
+    display:none;
+    margin-top:16px;
+    background:var(--panel);
+    border:1px solid var(--ok-dim);
+    border-radius:8px;
+    padding:22px 26px;
+    position:relative;
+    box-shadow:0 14px 32px -18px rgba(22,33,58,0.2);
+  }
+  .diagram-detail.open{ display:block; }
+  .diagram-detail-close{
+    position:absolute; top:12px; right:12px;
+    width:26px; height:26px;
+    border:none; background:var(--panel-2); color:var(--text-dim);
+    border-radius:50%; cursor:pointer; font-size:16px; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease, color .15s ease;
+  }
+  .diagram-detail-close:hover{ background:var(--ok-dim); color:var(--ok); }
+  .diagram-detail-tag{
+    font-size:11px; color:var(--ok); letter-spacing:0.07em;
+    margin-bottom:8px; padding-right:30px;
+  }
+  .diagram-detail h3{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:19px; font-weight:700; color:var(--text);
+    margin-bottom:10px; padding-right:30px;
+  }
+  .diagram-detail p{
+    font-size:14.5px; color:var(--text-dim); line-height:1.6; max-width:660px;
+  }
+  .diagram-detail-outcome{
+    margin-top:14px; padding-top:14px;
+    border-top:1px solid var(--border);
+    font-size:13.5px; font-weight:600; color:var(--build);
+    line-height:1.55;
+  }
 
   /* ---------- SECTION SHELL ---------- */
   section{ padding:88px 0; border-bottom:1px solid var(--border); }
@@ -726,36 +771,46 @@
         <title id="diagTitle">Platform architecture diagram</title>
         <desc id="diagDesc">Pull requests reviewed by an AI agent, gating Terraform modules that provision dev, staging, and prod EKS clusters. Each cluster runs ArgoCD, an EFK logging stack with S3 archival, and Prometheus alerting. A read-only Claude Code skill reads the EFK stack for diagnostics.</desc>
         <style>
-          .dbox{ fill:var(--panel-2); stroke:var(--border); stroke-width:1.5; }
-          .dbox-accent{ fill:var(--panel-2); stroke:var(--ok); stroke-width:1.5; }
+          .dbox{ fill:var(--panel-2); stroke:var(--border); stroke-width:1.5; transition:stroke .15s ease, stroke-width .15s ease, fill .15s ease; }
+          .dbox-accent{ fill:var(--panel-2); stroke:var(--ok); stroke-width:1.5; transition:stroke .15s ease, stroke-width .15s ease, fill .15s ease; }
           .dlabel{ font-family:'IBM Plex Mono', monospace; font-size:13px; font-weight:600; fill:var(--text); }
           .dsub{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; fill:var(--text-faint); }
           .dtag{ font-family:'IBM Plex Mono', monospace; font-size:9.5px; fill:var(--ok); letter-spacing:0.06em; }
           .dline{ stroke:var(--border); stroke-width:1.5; fill:none; }
           .dline-accent{ stroke:var(--ok); stroke-width:1.5; fill:none; stroke-dasharray:4 4; }
+          .dnode{ cursor:pointer; outline:none; }
+          .dnode:hover .dbox, .dnode:hover .dbox-accent{ stroke:var(--ok); stroke-width:2; }
+          .dnode:focus-visible .dbox, .dnode:focus-visible .dbox-accent{ stroke:var(--ok); stroke-width:2.5; }
+          .dnode.active .dbox, .dnode.active .dbox-accent{ fill:rgba(37,99,235,0.07); stroke:var(--ok); stroke-width:2.5; }
         </style>
 
         <!-- Row 0: GitHub repos -> PR review agent -->
-        <rect class="dbox" x="40" y="24" width="220" height="64" rx="6"/>
-        <text class="dlabel" x="60" y="52">GitHub — 30 repos</text>
-        <text class="dsub" x="60" y="70">pull requests opened</text>
+        <g class="dnode" data-node="github" tabindex="0" role="button" aria-label="GitHub — 30 repos. Click for detail.">
+          <rect class="dbox" x="40" y="24" width="220" height="64" rx="6"/>
+          <text class="dlabel" x="60" y="52">GitHub — 30 repos</text>
+          <text class="dsub" x="60" y="70">pull requests opened</text>
+        </g>
 
         <path class="dline" d="M260,56 H420"/>
         <polygon points="420,56 410,51 410,61" fill="var(--border)"/>
 
-        <rect class="dbox-accent" x="420" y="24" width="280" height="64" rx="6"/>
-        <text class="dtag" x="440" y="42">CLAUDE CODE + JIRA MCP</text>
-        <text class="dlabel" x="440" y="60">PR-review agent</text>
-        <text class="dsub" x="440" y="76">flags gaps &amp; exposed secrets pre-merge</text>
+        <g class="dnode" data-node="pr-review" tabindex="0" role="button" aria-label="AI PR-review agent. Click for detail.">
+          <rect class="dbox-accent" x="420" y="24" width="280" height="64" rx="6"/>
+          <text class="dtag" x="440" y="42">CLAUDE CODE + JIRA MCP</text>
+          <text class="dlabel" x="440" y="60">PR-review agent</text>
+          <text class="dsub" x="440" y="76">catches gaps &amp; exposed secrets pre-merge</text>
+        </g>
 
         <path class="dline" d="M560,88 V130"/>
         <polygon points="560,130 555,120 565,120" fill="var(--border)"/>
 
         <!-- Row 1: Terraform modules -->
-        <rect class="dbox" x="400" y="130" width="320" height="64" rx="6"/>
-        <text class="dtag" x="420" y="150">TERRAFORM</text>
-        <text class="dlabel" x="420" y="168">Reusable modules · per-env tfvars</text>
-        <text class="dsub" x="420" y="184">rewritten to remove config drift</text>
+        <g class="dnode" data-node="terraform" tabindex="0" role="button" aria-label="Terraform reusable modules. Click for detail.">
+          <rect class="dbox" x="400" y="130" width="320" height="64" rx="6"/>
+          <text class="dtag" x="420" y="150">TERRAFORM</text>
+          <text class="dlabel" x="420" y="168">Reusable modules · per-env tfvars</text>
+          <text class="dsub" x="420" y="184">rewritten to remove config drift</text>
+        </g>
 
         <!-- fan-out lines to 3 clusters -->
         <path class="dline" d="M480,194 V230 H180 V262"/>
@@ -766,18 +821,24 @@
         <polygon points="940,262 935,252 945,252" fill="var(--border)"/>
 
         <!-- Row 2: three clusters -->
-        <rect class="dbox" x="70" y="262" width="220" height="58" rx="6"/>
-        <text class="dlabel" x="90" y="288">EKS — dev</text>
-        <text class="dsub" x="90" y="306">validation-first</text>
+        <g class="dnode" data-node="eks" tabindex="0" role="button" aria-label="EKS dev, staging, and prod clusters. Click for detail.">
+          <rect class="dbox" x="70" y="262" width="220" height="58" rx="6"/>
+          <text class="dlabel" x="90" y="288">EKS — dev</text>
+          <text class="dsub" x="90" y="306">validation-first</text>
+        </g>
 
-        <rect class="dbox" x="450" y="262" width="220" height="58" rx="6"/>
-        <text class="dlabel" x="470" y="288">EKS — staging</text>
-        <text class="dsub" x="470" y="306">pre-prod parity</text>
+        <g class="dnode" data-node="eks" tabindex="0" role="button" aria-label="EKS dev, staging, and prod clusters. Click for detail.">
+          <rect class="dbox" x="450" y="262" width="220" height="58" rx="6"/>
+          <text class="dlabel" x="470" y="288">EKS — staging</text>
+          <text class="dsub" x="470" y="306">pre-prod parity</text>
+        </g>
 
-        <rect class="dbox-accent" x="830" y="262" width="220" height="58" rx="6"/>
-        <text class="dtag" x="850" y="280">LIVE</text>
-        <text class="dlabel" x="850" y="298">EKS — prod</text>
-        <text class="dsub" x="850" y="314">~10 services</text>
+        <g class="dnode" data-node="eks" tabindex="0" role="button" aria-label="EKS dev, staging, and prod clusters. Click for detail.">
+          <rect class="dbox-accent" x="830" y="262" width="220" height="58" rx="6"/>
+          <text class="dtag" x="850" y="280">LIVE</text>
+          <text class="dlabel" x="850" y="298">EKS — prod</text>
+          <text class="dsub" x="850" y="314">10 services</text>
+        </g>
 
         <!-- converge into platform layer -->
         <path class="dline" d="M180,320 V352 H550 V368"/>
@@ -786,32 +847,49 @@
         <polygon points="560,368 555,358 565,358" fill="var(--border)"/>
 
         <!-- Row 3: platform layer -->
-        <rect class="dbox" x="110" y="368" width="240" height="70" rx="6"/>
-        <text class="dlabel" x="130" y="396">ArgoCD</text>
-        <text class="dsub" x="130" y="414">auto-sync + self-heal deploys</text>
+        <g class="dnode" data-node="argocd" tabindex="0" role="button" aria-label="ArgoCD GitOps delivery. Click for detail.">
+          <rect class="dbox" x="110" y="368" width="240" height="70" rx="6"/>
+          <text class="dlabel" x="130" y="396">ArgoCD</text>
+          <text class="dsub" x="130" y="414">auto-sync + self-heal deploys</text>
+        </g>
 
-        <rect class="dbox" x="430" y="368" width="240" height="70" rx="6"/>
-        <text class="dlabel" x="450" y="396">EFK + S3</text>
-        <text class="dsub" x="450" y="414">centralized logs, archived</text>
+        <g class="dnode" data-node="efk" tabindex="0" role="button" aria-label="EFK plus S3 centralized logging. Click for detail.">
+          <rect class="dbox" x="430" y="368" width="240" height="70" rx="6"/>
+          <text class="dlabel" x="450" y="396">EFK + S3</text>
+          <text class="dsub" x="450" y="414">centralized logs, archived</text>
+        </g>
 
-        <rect class="dbox" x="750" y="368" width="240" height="70" rx="6"/>
-        <text class="dlabel" x="770" y="396">Prometheus</text>
-        <text class="dsub" x="770" y="414">CPU/memory alerting</text>
+        <g class="dnode" data-node="prometheus" tabindex="0" role="button" aria-label="Prometheus and Grafana alerting. Click for detail.">
+          <rect class="dbox" x="750" y="368" width="240" height="70" rx="6"/>
+          <text class="dlabel" x="770" y="396">Prometheus</text>
+          <text class="dsub" x="770" y="414">CPU/memory alerting</text>
+        </g>
 
         <!-- EFK -> AI diagnostics -->
         <path class="dline-accent" d="M550,438 V480 H560 V510"/>
         <polygon points="560,510 555,500 565,500" fill="var(--ok)"/>
 
         <!-- Row 4: AI diagnostics -->
-        <rect class="dbox-accent" x="380" y="510" width="360" height="72" rx="6"/>
-        <text class="dtag" x="400" y="530">CLAUDE CODE — READ-ONLY</text>
-        <text class="dlabel" x="400" y="550">log-diagnostics skill</text>
-        <text class="dsub" x="400" y="568">20-min Kibana/kubectl dive → one command</text>
+        <g class="dnode" data-node="log-diagnostics" tabindex="0" role="button" aria-label="log-diagnostics Claude Code skill. Click for detail.">
+          <rect class="dbox-accent" x="380" y="510" width="360" height="72" rx="6"/>
+          <text class="dtag" x="400" y="530">CLAUDE CODE — READ-ONLY</text>
+          <text class="dlabel" x="400" y="550">log-diagnostics skill</text>
+          <text class="dsub" x="400" y="568">20-min Kibana/kubectl dive → one command</text>
+        </g>
 
         <!-- legend -->
         <text class="dsub" x="400" y="612">— — — AI-agent path</text>
         <text class="dsub" x="400" y="628">─── infra provisioning path</text>
       </svg>
+      <p class="diagram-hint">Click any node for how it was actually built →</p>
+
+      <div class="diagram-detail" id="diagramDetail">
+        <button class="diagram-detail-close" id="diagramDetailClose" aria-label="Close detail">&times;</button>
+        <div class="diagram-detail-tag mono" id="diagramDetailTag"></div>
+        <h3 id="diagramDetailTitle"></h3>
+        <p id="diagramDetailDesc"></p>
+        <div class="diagram-detail-outcome" id="diagramDetailOutcome"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1016,6 +1094,106 @@
     }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
 
     targets.forEach(function(t){ io.observe(t); });
+  })();
+
+  // Architecture diagram — interactive nodes
+  (function(){
+    var NODE_INFO = {
+      'github': {
+        tag: 'GITHUB ACTIONS',
+        title: 'GitHub — 30 repos',
+        desc: 'Every pull request opened across 30 repos — 2 product teams plus the platform team — triggers the same review pipeline before a human looks at it.',
+        outcome: ''
+      },
+      'pr-review': {
+        tag: 'CLAUDE CODE + JIRA MCP',
+        title: 'AI PR-review agent',
+        desc: 'A customized Claude Code GitHub Action, triggered only when a PR opens (cost efficiency — not on every push). It pulls the linked Jira ticket through a Jira MCP server — a real API call, not pasted ticket text — and compares what was asked against what was delivered, plus scans for exposed secrets. Posts findings as PR comments; advisory only, no merge gate.',
+        outcome: 'Caught real requirement gaps and exposed secrets before merge — across 30 repos, every PR.'
+      },
+      'terraform': {
+        tag: 'TERRAFORM',
+        title: 'Reusable modules, per-environment tfvars',
+        desc: 'The EKS module used to be one shared file across dev, staging, and prod — and it drifted, because one-off manual fixes made directly to a live environment never made it back into the module. Rewrote it into reusable modules with per-environment tfvars, so an environment’s entire config lives in one file with nothing hand-edited outside it.',
+        outcome: 'Validated on 2 throwaway environments — clean build, clean teardown — before the same module ever touched prod.'
+      },
+      'eks': {
+        tag: 'KUBERNETES',
+        title: 'EKS — dev / staging / prod',
+        desc: '3 clusters stand today, one per environment, all provisioned by the same Terraform module. Counting the throwaway validation environments and rebuilds during the module rewrite, 8+ clusters have been provisioned via Terraform over time — worth keeping "standing" and "provisioned" straight if asked which number is which.',
+        outcome: 'Autoscaling on all three — replaced manual cluster setup entirely.'
+      },
+      'argocd': {
+        tag: 'GITOPS',
+        title: 'ArgoCD',
+        desc: 'Auto-sync and self-heal enabled — a drift between what’s in Git and what’s actually running gets corrected automatically instead of paged on.',
+        outcome: 'Sustains 45 deploys/week with no manual deployment steps.'
+      },
+      'efk': {
+        tag: 'ELASTICSEARCH · FLUENTD · KIBANA',
+        title: 'EFK + S3',
+        desc: 'Fluentd ships logs off every pod to Elasticsearch — the only way logs stay searchable once you’re past a handful of services. Kibana sits on top as the query layer; older logs age out to S3 for cheaper, compliant retention.',
+        outcome: 'Centralized log search across 10 services, replacing scattered per-service access.'
+      },
+      'prometheus': {
+        tag: 'PROMETHEUS + GRAFANA',
+        title: 'Prometheus alerting',
+        desc: 'Scrapes node and pod metrics, alerting on memory and CPU thresholds. Grafana confirms the trend — sustained climb vs. a one-off spike — before anyone acts on it.',
+        outcome: 'Caught a sustained memory climb on a production service and resolved it same-day, before it affected customers.'
+      },
+      'log-diagnostics': {
+        tag: 'CLAUDE CODE — READ-ONLY',
+        title: 'log-diagnostics skill',
+        desc: 'On demand, it queries Kibana for error patterns and cross-references live kubectl pod/deployment state, then returns a ranked root-cause candidate instead of a wall of raw logs. Read-only by design, no cluster mutation — it surfaces a candidate, a human confirms and acts.',
+        outcome: 'Collapsed a 20-minute manual Kibana/kubectl trace into one command, verified on a production OOM-kill incident.'
+      }
+    };
+
+    var nodes = document.querySelectorAll('.dnode');
+    if(!nodes.length) return;
+
+    var panel = document.getElementById('diagramDetail');
+    var tagEl = document.getElementById('diagramDetailTag');
+    var titleEl = document.getElementById('diagramDetailTitle');
+    var descEl = document.getElementById('diagramDetailDesc');
+    var outcomeEl = document.getElementById('diagramDetailOutcome');
+    var closeBtn = document.getElementById('diagramDetailClose');
+    var activeId = null;
+
+    function closePanel(){
+      panel.classList.remove('open');
+      nodes.forEach(function(n){ n.classList.remove('active'); });
+      activeId = null;
+    }
+
+    function openNode(id){
+      var info = NODE_INFO[id];
+      if(!info) return;
+      tagEl.textContent = info.tag || '';
+      titleEl.textContent = info.title;
+      descEl.textContent = info.desc;
+      outcomeEl.textContent = info.outcome || '';
+      outcomeEl.style.display = info.outcome ? 'block' : 'none';
+      nodes.forEach(function(n){ n.classList.toggle('active', n.getAttribute('data-node') === id); });
+      panel.classList.add('open');
+      activeId = id;
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    nodes.forEach(function(n){
+      var id = n.getAttribute('data-node');
+      n.addEventListener('click', function(){
+        if(activeId === id){ closePanel(); } else { openNode(id); }
+      });
+      n.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          if(activeId === id){ closePanel(); } else { openNode(id); }
+        }
+      });
+    });
+
+    closeBtn.addEventListener('click', closePanel);
   })();
 </script>
 
