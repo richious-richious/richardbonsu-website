@@ -281,6 +281,7 @@
     min-width:640px;
     height:auto;
   }
+  .diagram-mobile{ display:none; }
   .diagram-hint{
     margin-top:10px;
     font-family:'IBM Plex Mono', monospace;
@@ -615,8 +616,9 @@
     .log-entry{ grid-template-columns:1fr; gap:10px; padding:22px 20px; margin:0 -20px; }
 
     section{ padding:56px 0; }
-    .diagram-frame{ padding:14px; }
-    .diagram-frame svg{ min-width:820px; }
+    .diagram-frame{ padding:16px; overflow-x:visible; }
+    .diagram-desktop{ display:none; }
+    .diagram-mobile{ display:block; width:100%; min-width:0; height:auto; }
     .diagram-caption{ font-size:13.5px; }
   }
 
@@ -767,7 +769,7 @@
     <p class="diagram-caption">How a change gets from a pull request to running in production — the platform I built and run at Innovid.</p>
 
     <div class="diagram-frame">
-      <svg viewBox="0 0 1100 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagTitle diagDesc">
+      <svg class="diagram-desktop" viewBox="0 0 1100 680" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagTitle diagDesc">
         <title id="diagTitle">Platform architecture diagram</title>
         <desc id="diagDesc">Pull requests reviewed by an AI agent, gating Terraform modules that provision dev, staging, and prod EKS clusters. Each cluster runs ArgoCD, an EFK logging stack with S3 archival, and Prometheus alerting. A read-only Claude Code skill reads the EFK stack for diagnostics.</desc>
         <style>
@@ -880,6 +882,77 @@
         <!-- legend -->
         <text class="dsub" x="400" y="612">— — — AI-agent path</text>
         <text class="dsub" x="400" y="628">─── infra provisioning path</text>
+      </svg>
+
+      <!-- Mobile: same 8 real nodes, stacked single-column, larger relative text -->
+      <svg class="diagram-mobile" viewBox="0 0 340 690" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="diagTitleM diagDescM">
+        <title id="diagTitleM">Platform architecture diagram (mobile)</title>
+        <desc id="diagDescM">Pull requests reviewed by an AI agent, gating Terraform modules that provision the EKS clusters. Each cluster runs ArgoCD, an EFK logging stack with S3 archival, and Prometheus alerting. A read-only Claude Code skill reads the EFK stack for diagnostics.</desc>
+
+        <g class="dnode" data-node="github" tabindex="0" role="button" aria-label="GitHub — 30 repos. Click for detail.">
+          <rect class="dbox" x="20" y="16" width="300" height="56" rx="6"/>
+          <text class="dlabel" x="36" y="42">GitHub — 30 repos</text>
+          <text class="dsub" x="36" y="60">pull requests opened</text>
+        </g>
+        <path class="dline" d="M170,72 V92"/>
+        <polygon points="170,92 165,82 175,82" fill="var(--border)"/>
+
+        <g class="dnode" data-node="pr-review" tabindex="0" role="button" aria-label="AI PR-review agent. Click for detail.">
+          <rect class="dbox-accent" x="20" y="92" width="300" height="70" rx="6"/>
+          <text class="dtag" x="36" y="112">CLAUDE CODE + JIRA MCP</text>
+          <text class="dlabel" x="36" y="132">PR-review agent</text>
+          <text class="dsub" x="36" y="150">catches gaps &amp; secrets pre-merge</text>
+        </g>
+        <path class="dline" d="M170,162 V182"/>
+        <polygon points="170,182 165,172 175,172" fill="var(--border)"/>
+
+        <g class="dnode" data-node="terraform" tabindex="0" role="button" aria-label="Terraform reusable modules. Click for detail.">
+          <rect class="dbox" x="20" y="182" width="300" height="70" rx="6"/>
+          <text class="dtag" x="36" y="202">TERRAFORM</text>
+          <text class="dlabel" x="36" y="222">Reusable modules · per-env tfvars</text>
+          <text class="dsub" x="36" y="240">rewritten to remove config drift</text>
+        </g>
+        <path class="dline" d="M170,252 V272"/>
+        <polygon points="170,272 165,262 175,262" fill="var(--border)"/>
+
+        <g class="dnode" data-node="eks" tabindex="0" role="button" aria-label="EKS dev, staging, and prod clusters. Click for detail.">
+          <rect class="dbox-accent" x="20" y="272" width="300" height="64" rx="6"/>
+          <text class="dtag" x="36" y="290">LIVE — DEV / STAGING / PROD</text>
+          <text class="dlabel" x="36" y="308">EKS clusters</text>
+          <text class="dsub" x="36" y="326">10 services, autoscaling</text>
+        </g>
+        <path class="dline" d="M170,336 V356"/>
+        <polygon points="170,356 165,346 175,346" fill="var(--border)"/>
+
+        <g class="dnode" data-node="argocd" tabindex="0" role="button" aria-label="ArgoCD GitOps delivery. Click for detail.">
+          <rect class="dbox" x="20" y="356" width="300" height="54" rx="6"/>
+          <text class="dlabel" x="36" y="380">ArgoCD</text>
+          <text class="dsub" x="36" y="398">auto-sync + self-heal deploys</text>
+        </g>
+
+        <g class="dnode" data-node="efk" tabindex="0" role="button" aria-label="EFK plus S3 centralized logging. Click for detail.">
+          <rect class="dbox" x="20" y="418" width="300" height="54" rx="6"/>
+          <text class="dlabel" x="36" y="442">EFK + S3</text>
+          <text class="dsub" x="36" y="460">centralized logs, archived</text>
+        </g>
+
+        <g class="dnode" data-node="prometheus" tabindex="0" role="button" aria-label="Prometheus and Grafana alerting. Click for detail.">
+          <rect class="dbox" x="20" y="480" width="300" height="54" rx="6"/>
+          <text class="dlabel" x="36" y="504">Prometheus</text>
+          <text class="dsub" x="36" y="522">CPU/memory alerting</text>
+        </g>
+        <path class="dline-accent" d="M170,534 V554"/>
+        <polygon points="170,554 165,544 175,544" fill="var(--ok)"/>
+
+        <g class="dnode" data-node="log-diagnostics" tabindex="0" role="button" aria-label="log-diagnostics Claude Code skill. Click for detail.">
+          <rect class="dbox-accent" x="20" y="554" width="300" height="70" rx="6"/>
+          <text class="dtag" x="36" y="574">CLAUDE CODE — READ-ONLY</text>
+          <text class="dlabel" x="36" y="594">log-diagnostics skill</text>
+          <text class="dsub" x="36" y="612">reads the EFK stack, one command</text>
+        </g>
+
+        <text class="dsub" x="20" y="656">— — — AI-agent path</text>
+        <text class="dsub" x="20" y="672">─── infra provisioning path</text>
       </svg>
       <p class="diagram-hint">Click any node for how it was actually built →</p>
 
