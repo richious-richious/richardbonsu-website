@@ -181,26 +181,25 @@
   .hero h1{
     font-family:'IBM Plex Mono', monospace;
     font-weight:700;
-    font-size:clamp(38px, 7vw, 64px);
+    font-size:clamp(42px, 7.5vw, 68px);
     letter-spacing:-0.01em;
     line-height:1.05;
+    color:var(--text);
     opacity:0;
     transform:translateY(8px);
     transition:opacity .5s ease, transform .5s ease;
-    background:linear-gradient(100deg, var(--text) 0%, var(--text) 35%, var(--ok) 72%, var(--build) 100%);
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 0 18px rgba(37,99,235,0.14));
   }
   .hero h1.in{ opacity:1; transform:translateY(0); }
+  .hero h1 .accent{ color:var(--ok); }
 
   .hero .role{
-    margin-top:16px;
-    font-size:17px;
+    margin-top:18px;
+    font-size:18px;
+    font-weight:500;
     color:var(--text-dim);
-    max-width:560px;
+    max-width:600px;
   }
+  .hero .role strong{ color:var(--text); font-weight:700; }
 
   .meta-row{
     display:flex; flex-wrap:wrap; gap:10px 28px;
@@ -268,7 +267,7 @@
     margin-bottom:28px;
   }
   .diagram-frame{
-    background:linear-gradient(160deg, rgba(255,255,255,0.95), rgba(237,243,252,0.85));
+    background:var(--panel);
     backdrop-filter:blur(10px);
     border:1px solid var(--border);
     border-radius:8px;
@@ -284,27 +283,29 @@
   }
 
   /* ---------- SECTION SHELL ---------- */
-  section{ padding:64px 0; border-bottom:1px solid var(--border); }
+  section{ padding:88px 0; border-bottom:1px solid var(--border); }
   .section-head{
-    display:flex; align-items:center; gap:12px;
-    margin-bottom:32px;
+    display:flex; align-items:center; gap:14px;
+    margin-bottom:40px;
   }
+  .section-head .icon{ width:24px; height:24px; }
   .section-head .idx{
     font-family:'IBM Plex Mono', monospace;
-    color:var(--ok);
-    font-size:13px;
+    color:var(--ok-dim);
+    font-size:12px;
+    letter-spacing:0.06em;
   }
   .section-head h2{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:14px;
-    letter-spacing:0.14em;
-    text-transform:uppercase;
-    color:var(--text-dim);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:clamp(26px, 3.4vw, 36px);
+    font-weight:700;
+    letter-spacing:-0.01em;
+    color:var(--text);
   }
 
   /* ---------- ABOUT ---------- */
   .manifest{
-    background:linear-gradient(160deg, rgba(255,255,255,0.95), rgba(237,243,252,0.85));
+    background:var(--panel);
     backdrop-filter:blur(10px);
     border:1px solid var(--border);
     border-radius:8px;
@@ -326,7 +327,7 @@
   }
   .manifest-head b{ color:var(--ok); font-weight:500; }
   .manifest-body{ padding:26px 28px; }
-  .manifest-body p{ color:var(--text-dim); font-size:15.5px; max-width:640px; }
+  .manifest-body p{ color:var(--text-dim); font-size:17px; line-height:1.7; max-width:660px; }
 
   /* ---------- EXPERIENCE ---------- */
   .log-entry{
@@ -357,10 +358,10 @@
     margin-bottom:8px;
   }
   .log-role{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:16px;
-    font-weight:600;
-    margin-bottom:2px;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:21px;
+    font-weight:700;
+    margin-bottom:4px;
   }
   .log-sub{
     color:var(--text-dim);
@@ -372,9 +373,10 @@
   .log-entry li{
     position:relative;
     padding-left:18px;
-    margin-bottom:9px;
+    margin-bottom:10px;
     color:var(--text-dim);
-    font-size:14.5px;
+    font-size:16px;
+    line-height:1.6;
   }
   .log-entry li::before{
     content:"›";
@@ -394,20 +396,21 @@
     overflow:hidden;
   }
   .stack-group{
-    background:linear-gradient(160deg, rgba(255,255,255,0.9), rgba(237,243,252,0.65));
+    background:var(--panel-2);
     padding:22px 24px;
-    transition:background .2s ease, box-shadow .2s ease;
+    transition:background .2s ease, box-shadow .2s ease, transform .2s ease;
   }
   .stack-group:hover{
-    background:linear-gradient(160deg, rgba(255,255,255,1), rgba(230,238,251,0.9));
+    background:var(--panel);
     box-shadow:inset 0 0 0 1px rgba(37,99,235,0.15);
+    transform:translateY(-2px);
   }
   .stack-group h3{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--text-faint);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:0.01em;
+    color:var(--text);
     margin-bottom:14px;
     display:flex; align-items:center; gap:9px;
   }
@@ -429,6 +432,64 @@
     transform:translateY(-1px);
   }
 
+  /* ---------- PROJECTS ---------- */
+  .project-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:20px;
+  }
+  .project-card{
+    background:#FFFFFF;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:24px;
+    display:flex; flex-direction:column; gap:12px;
+    box-shadow:0 1px 2px rgba(22,33,58,0.04);
+    transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .project-card:hover{
+    transform:translateY(-3px);
+    border-color:var(--ok-dim);
+    box-shadow:0 14px 32px -18px rgba(22,33,58,0.22);
+  }
+  .project-card .p-icon{
+    width:40px; height:40px;
+    border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(37,99,235,0.08);
+  }
+  .project-card .p-icon svg{ width:20px; height:20px; color:var(--ok); }
+  .project-card.teal .p-icon{ background:rgba(13,148,136,0.1); }
+  .project-card.teal .p-icon svg{ color:var(--build); }
+  .project-card h3{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:20px;
+    font-weight:700;
+    color:var(--text);
+  }
+  .project-card .p-desc{ color:var(--text-dim); font-size:14.5px; line-height:1.55; }
+  .project-card .p-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:2px; }
+  .project-card .p-tags span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--text-dim);
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    padding:3px 8px;
+    border-radius:3px;
+  }
+  .project-card .p-outcome{
+    margin-top:auto;
+    padding-top:12px;
+    border-top:1px solid var(--border);
+    font-size:13.5px;
+    color:var(--ok);
+    font-weight:600;
+    line-height:1.5;
+  }
+  .project-card.teal .p-outcome{ color:var(--build); }
+  .project-card .p-note{ font-size:11.5px; color:var(--text-faint); font-style:italic; }
+
   /* ---------- EDUCATION ---------- */
   .edu-item{
     display:flex; justify-content:space-between; align-items:baseline;
@@ -449,7 +510,7 @@
   /* ---------- CONTACT / FOOTER ---------- */
   footer{ padding:64px 0 48px; }
   .terminal{
-    background:linear-gradient(160deg, rgba(255,255,255,0.95), rgba(237,243,252,0.85));
+    background:var(--panel);
     backdrop-filter:blur(10px);
     border:1px solid var(--border);
     border-radius:8px;
@@ -480,6 +541,10 @@
   }
 
   /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .project-grid{ grid-template-columns:repeat(2, 1fr); }
+  }
+
   @media (max-width:720px){
     .wrap{ padding:0 20px; }
     .nav-links{ display:none; }
@@ -491,18 +556,20 @@
     .stage span.label{ display:none; }
     .stage .node{ width:7px; height:7px; }
 
-    .hero h1{ font-size:clamp(32px, 11vw, 44px); }
-    .hero .role{ font-size:14.5px; margin-top:10px; max-width:100%; }
+    .hero h1{ font-size:clamp(34px, 12vw, 46px); }
+    .hero .role{ font-size:15px; margin-top:12px; max-width:100%; }
 
     .meta-row{ gap:6px 16px; margin-top:18px; font-size:10.5px; }
 
     .cta-row{ margin-top:22px; gap:10px; flex-direction:column; }
     .btn{ text-align:center; width:100%; }
 
+    .section-head{ margin-bottom:26px; }
     .stack-grid{ grid-template-columns:1fr; }
+    .project-grid{ grid-template-columns:1fr; }
     .log-entry{ grid-template-columns:1fr; gap:10px; padding:22px 20px; margin:0 -20px; }
 
-    section{ padding:48px 0; }
+    section{ padding:56px 0; }
     .diagram-frame{ padding:14px; }
     .diagram-frame svg{ min-width:820px; }
     .diagram-caption{ font-size:13.5px; }
@@ -517,6 +584,11 @@
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; }
   }
+
+  /* ---------- SCROLL REVEAL (no-JS-safe: only hides once .js-ready is set) ---------- */
+  .reveal{ transition:opacity .6s ease, transform .6s ease; }
+  .js-ready .reveal{ opacity:0; transform:translateY(18px); }
+  .js-ready .reveal.visible{ opacity:1; transform:translateY(0); }
 </style>
 </head>
 <body>
@@ -583,6 +655,7 @@
       <div class="nav-links">
         <a href="#about">about</a>
         <a href="#architecture">architecture</a>
+        <a href="#projects">projects</a>
         <a href="#experience">experience</a>
         <a href="#stack">stack</a>
         <a href="#education">education</a>
@@ -604,8 +677,8 @@
     <div class="stage" data-stage="3"><span class="node"></span><span class="label">LIVE</span></div>
   </div>
 
-  <h1 id="hero-name">Richard Bonsu</h1>
-  <p class="role">Platform Engineer — AWS · Kubernetes · Terraform · CI/CD · AI-Agentic Workflows</p>
+  <h1 id="hero-name">Richard <span class="accent">Bonsu</span></h1>
+  <p class="role"><strong>Platform Engineer</strong> — AWS · Kubernetes · Terraform · CI/CD · AI-Agentic Workflows</p>
 
   <div class="meta-row">
     <span><b>location</b> — Chicago, IL</span>
@@ -614,12 +687,13 @@
   </div>
 
   <div class="cta-row">
-    <a class="btn primary" href="https://www.linkedin.com/in/richardbonsu" target="_blank" rel="noopener">View LinkedIn →</a>
-    <a class="btn secondary" href="#contact">Get in touch</a>
+    <a class="btn primary" href="#projects">View My Work →</a>
+    <a class="btn secondary" href="#experience">View Resume</a>
+    <a class="btn secondary" href="https://www.linkedin.com/in/richardbonsu" target="_blank" rel="noopener">LinkedIn</a>
   </div>
 </section>
 
-<section id="about">
+<section id="about" class="reveal">
   <div class="wrap">
     <div class="section-head"><svg class="icon"><use href="#icon-user"/></svg><span class="idx mono">01</span><h2>About</h2></div>
     <div class="manifest">
@@ -642,7 +716,7 @@
   </div>
 </section>
 
-<section id="architecture">
+<section id="architecture" class="reveal">
   <div class="wrap">
     <div class="section-head"><svg class="icon"><use href="#icon-flow"/></svg><span class="idx mono">02</span><h2>Platform Architecture</h2></div>
     <p class="diagram-caption">How a change gets from a pull request to running in production — the platform I built and run at Innovid.</p>
@@ -742,9 +816,45 @@
   </div>
 </section>
 
-<section id="experience">
+<section id="projects" class="reveal">
   <div class="wrap">
-    <div class="section-head"><svg class="icon"><use href="#icon-briefcase"/></svg><span class="idx mono">03</span><h2>Experience</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-spark"/></svg><span class="idx mono">03</span><h2>Projects</h2></div>
+    <p class="diagram-caption">Three things I built and shipped to production at Innovid — the work behind the diagram above.</p>
+
+    <div class="project-grid">
+      <div class="project-card">
+        <div class="p-icon"><svg><use href="#icon-spark"/></svg></div>
+        <h3>AI-Powered Log Diagnostics</h3>
+        <p class="p-desc">A Claude Code skill that correlates Kibana error patterns with live kubectl state to surface a root cause — collapsing a manual investigation into one command.</p>
+        <div class="p-tags"><span>Claude Code</span><span>Kubernetes</span><span>EKS</span><span>Elasticsearch</span><span>Kibana</span></div>
+        <div class="p-outcome">20-minute manual trace → one command, verified on a production OOM-kill incident</div>
+        <div class="p-note">Internal Innovid tooling — no public repo</div>
+      </div>
+
+      <div class="project-card">
+        <div class="p-icon"><svg><use href="#icon-badge"/></svg></div>
+        <h3>AI PR-Review Agent</h3>
+        <p class="p-desc">A customized Claude Code GitHub Action that checks every pull request against its Jira ticket and scans for exposed secrets before merge.</p>
+        <div class="p-tags"><span>Claude Code</span><span>GitHub Actions</span><span>Jira MCP</span></div>
+        <div class="p-outcome">Runs on every PR across 30 repos — catching missed requirements and exposed secrets before merge</div>
+        <div class="p-note">Internal Innovid tooling — no public repo</div>
+      </div>
+
+      <div class="project-card teal">
+        <div class="p-icon"><svg><use href="#icon-flow"/></svg></div>
+        <h3>EKS/Terraform Platform Rebuild</h3>
+        <p class="p-desc">Rewrote a shared EKS Terraform module into reusable, per-environment modules to eliminate config drift across dev, staging, and prod.</p>
+        <div class="p-tags"><span>Terraform</span><span>EKS</span><span>Kubernetes</span></div>
+        <div class="p-outcome">Config drift eliminated structurally — validated on 2 throwaway environments before touching prod</div>
+        <div class="p-note">Internal Innovid tooling — no public repo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="reveal">
+  <div class="wrap">
+    <div class="section-head"><svg class="icon"><use href="#icon-briefcase"/></svg><span class="idx mono">04</span><h2>Experience</h2></div>
 
     <div class="log-entry">
       <div class="tag"><span class="head">HEAD</span><br>nov 2022 → present</div>
@@ -778,9 +888,9 @@
   </div>
 </section>
 
-<section id="stack">
+<section id="stack" class="reveal">
   <div class="wrap">
-    <div class="section-head"><svg class="icon"><use href="#icon-layers"/></svg><span class="idx mono">04</span><h2>Stack</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-layers"/></svg><span class="idx mono">05</span><h2>Stack</h2></div>
     <div class="stack-grid">
       <div class="stack-group">
         <h3><svg class="icon"><use href="#icon-cloud"/></svg>AWS</h3>
@@ -810,9 +920,9 @@
   </div>
 </section>
 
-<section id="education">
+<section id="education" class="reveal">
   <div class="wrap">
-    <div class="section-head"><svg class="icon"><use href="#icon-cap"/></svg><span class="idx mono">05</span><h2>Education &amp; Certifications</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-cap"/></svg><span class="idx mono">06</span><h2>Education &amp; Certifications</h2></div>
     <div>
       <div class="edu-item">
         <div>
@@ -841,7 +951,7 @@
 
 <footer id="contact">
   <div class="wrap">
-    <div class="section-head"><svg class="icon"><use href="#icon-mail"/></svg><span class="idx mono">06</span><h2>Contact</h2></div>
+    <div class="section-head"><svg class="icon"><use href="#icon-mail"/></svg><span class="idx mono">07</span><h2>Contact</h2></div>
     <div class="terminal">
       <div class="prompt"><span>$</span> connect --with richard</div>
       <div class="contact-links">
@@ -880,6 +990,31 @@
       setTimeout(function(){ activate(i); }, d);
     });
     setTimeout(function(){ heroName.classList.add('in'); }, 1500);
+  })();
+
+  // Section scroll reveal — restrained, no-JS-safe
+  (function(){
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var targets = document.querySelectorAll('.reveal');
+    if(!targets.length) return;
+
+    if(reduce || typeof IntersectionObserver === 'undefined'){
+      targets.forEach(function(t){ t.classList.add('visible'); });
+      return;
+    }
+
+    document.documentElement.classList.add('js-ready');
+
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+    targets.forEach(function(t){ io.observe(t); });
   })();
 </script>
 
