@@ -9,18 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #F6F9FD;
-    --panel: #FFFFFF;
-    --panel-2: #EDF3FC;
-    --border: #DAE3F0;
-    --text: #16213A;
-    --text-dim: #47567A;
-    --text-faint: #808EAC;
-    --ok: #2563EB;
-    --ok-dim: #B9CFFB;
-    --build: #0D9488;
+    /* dark-but-bright neutrals -- fixed, do not change with accent selection */
+    --bg: #0B111D;
+    --panel: #121A2B;
+    --panel-2: #182238;
+    --border: #26314A;
+    --text: #F1F5FB;
+    --text-dim: #A2ACC7;
+    --text-faint: #6C7796;
     --radius: 4px;
+
+    /* accent system -- overridden per [data-accent] below. Azure is the default. */
+    --ok: #3B82F6;
+    --ok-rgb: 59,130,246;
+    --ok-dim: rgba(var(--ok-rgb), 0.4); /* re-derives automatically whenever --ok-rgb changes */
   }
+
+  /* Six accent themes -- only --ok/--ok-rgb change, neutrals stay fixed */
+  [data-accent="azure"]  { --ok: #3B82F6; --ok-rgb: 59,130,246; }
+  [data-accent="indigo"] { --ok: #818CF8; --ok-rgb: 129,140,248; }
+  [data-accent="emerald"]{ --ok: #34D399; --ok-rgb: 52,211,153; }
+  [data-accent="cyan"]   { --ok: #22D3EE; --ok-rgb: 34,211,238; }
+  [data-accent="amber"]  { --ok: #FBBF24; --ok-rgb: 251,191,36; }
+  [data-accent="rose"]   { --ok: #FB7185; --ok-rgb: 251,113,133; }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
 
@@ -41,7 +52,7 @@
     position:fixed;
     top:-20%; left:-10%;
     width:70vw; height:70vw;
-    background:radial-gradient(circle, rgba(37,99,235,0.16) 0%, rgba(37,99,235,0) 60%);
+    background:radial-gradient(circle, rgba(var(--ok-rgb),0.16) 0%, rgba(var(--ok-rgb),0) 60%);
     filter:blur(10px);
     pointer-events:none;
     z-index:0;
@@ -52,7 +63,7 @@
     position:fixed;
     bottom:-25%; right:-15%;
     width:60vw; height:60vw;
-    background:radial-gradient(circle, rgba(13,148,136,0.13) 0%, rgba(13,148,136,0) 60%);
+    background:radial-gradient(circle, rgba(var(--ok-rgb),0.13) 0%, rgba(var(--ok-rgb),0) 60%);
     filter:blur(10px);
     pointer-events:none;
     z-index:0;
@@ -81,7 +92,7 @@
   /* ---------- NAV ---------- */
   header.site{
     position:sticky; top:0; z-index:50;
-    background:rgba(246,249,253,0.88);
+    background:rgba(11,17,29,0.88);
     backdrop-filter:blur(8px);
     border-bottom:1px solid var(--border);
   }
@@ -95,7 +106,7 @@
     font-size:14px;
     letter-spacing:0.06em;
   }
-  .brand span{ color:var(--ok); text-shadow:0 0 12px rgba(37,99,235,0.6); }
+  .brand span{ color:var(--ok); text-shadow:0 0 12px rgba(var(--ok-rgb),0.6); }
   .nav-links{
     display:flex; align-items:center; gap:28px;
     font-family:'IBM Plex Mono', monospace;
@@ -105,29 +116,83 @@
   }
   .nav-links a{ transition:color .15s ease; }
   .nav-links a:hover, .nav-links a:focus-visible{ color:var(--ok); outline:none; }
+  .nav-right{ display:flex; align-items:center; gap:12px; }
   .status-pill{
     display:flex; align-items:center; gap:7px;
     font-family:'IBM Plex Mono', monospace;
     font-size:11px; letter-spacing:0.05em;
     color:var(--ok);
     border:1px solid var(--ok-dim);
-    background:linear-gradient(135deg, rgba(37,99,235,0.1), rgba(37,99,235,0.03));
+    background:linear-gradient(135deg, rgba(var(--ok-rgb),0.1), rgba(var(--ok-rgb),0.03));
     padding:6px 11px;
     border-radius:20px;
-    box-shadow:0 0 16px -4px rgba(37,99,235,0.35);
+    box-shadow:0 0 16px -4px rgba(var(--ok-rgb),0.35);
   }
   .dot{
     width:6px; height:6px; border-radius:50%;
     background:var(--ok);
-    box-shadow:0 0 0 0 rgba(37,99,235,0.5);
+    box-shadow:0 0 0 0 rgba(var(--ok-rgb),0.5);
     animation:pulse 2.2s infinite;
   }
   @keyframes pulse{
-    0%{ box-shadow:0 0 0 0 rgba(37,99,235,0.45); }
-    70%{ box-shadow:0 0 0 6px rgba(37,99,235,0); }
-    100%{ box-shadow:0 0 0 0 rgba(37,99,235,0); }
+    0%{ box-shadow:0 0 0 0 rgba(var(--ok-rgb),0.45); }
+    70%{ box-shadow:0 0 0 6px rgba(var(--ok-rgb),0); }
+    100%{ box-shadow:0 0 0 0 rgba(var(--ok-rgb),0); }
   }
   .nav-toggle{ display:none; }
+
+  /* ---------- THEME PICKER ---------- */
+  .theme-picker{ position:relative; }
+  .theme-btn{
+    display:flex; align-items:center; gap:7px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; letter-spacing:0.03em;
+    color:var(--text-dim);
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:6px 12px 6px 8px;
+    cursor:pointer;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .theme-btn:hover, .theme-btn[aria-expanded="true"]{ border-color:var(--ok-dim); color:var(--text); }
+  .theme-swatch{
+    width:13px; height:13px; border-radius:50%;
+    background:var(--ok);
+    box-shadow:0 0 0 2px rgba(var(--ok-rgb),0.25);
+    flex-shrink:0;
+  }
+  .theme-menu{
+    position:absolute; top:calc(100% + 10px); right:0;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:8px;
+    min-width:150px;
+    box-shadow:0 20px 40px -16px rgba(0,0,0,0.5);
+    display:none;
+    flex-direction:column;
+    gap:2px;
+    z-index:60;
+  }
+  .theme-menu.open{ display:flex; }
+  .theme-option{
+    display:flex; align-items:center; gap:10px;
+    width:100%;
+    background:none; border:none;
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:13px;
+    color:var(--text-dim);
+    padding:8px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    text-align:left;
+    transition:background .12s ease, color .12s ease;
+  }
+  .theme-option:hover{ background:var(--panel-2); color:var(--text); }
+  .theme-option.active{ color:var(--text); font-weight:600; }
+  .theme-option.active::after{ content:"✓"; margin-left:auto; color:var(--ok); font-weight:700; }
+  .theme-option .theme-swatch{ box-shadow:none; }
 
   /* ---------- HERO / PIPELINE ---------- */
   .hero{
@@ -157,11 +222,11 @@
   .stage.active .node{
     background:var(--ok);
     border-color:var(--ok);
-    box-shadow:0 0 8px rgba(37,99,235,0.55);
+    box-shadow:0 0 8px rgba(var(--ok-rgb),0.55);
   }
   .stage.building .node{
-    background:var(--build);
-    border-color:var(--build);
+    background:var(--ok);
+    border-color:var(--ok);
   }
   .track{
     flex:1;
@@ -227,11 +292,11 @@
     overflow:hidden;
   }
   .btn.primary{
-    background:linear-gradient(135deg, #4C8DF7 0%, var(--ok) 55%, #1D4FC4 100%);
-    color:#FFFFFF;
+    background:var(--ok);
+    color:var(--bg);
     border-color:var(--ok);
-    font-weight:600;
-    box-shadow:0 4px 20px rgba(37,99,235,0.25);
+    font-weight:700;
+    box-shadow:0 4px 20px rgba(var(--ok-rgb),0.3);
   }
   .btn.primary::after{
     content:"";
@@ -242,22 +307,22 @@
     transition:left .55s ease;
   }
   .btn.primary:hover::after{ left:140%; }
-  .btn.primary:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(37,99,235,0.4); }
-  .btn.secondary{ background:rgba(22,33,58,0.03); color:var(--text); backdrop-filter:blur(6px); }
-  .btn.secondary:hover{ border-color:var(--ok); color:var(--ok); background:rgba(37,99,235,0.05); transform:translateY(-1px); }
+  .btn.primary:hover{ transform:translateY(-2px); box-shadow:0 10px 28px rgba(var(--ok-rgb),0.4); }
+  .btn.secondary{ background:rgba(255,255,255,0.05); color:var(--text); backdrop-filter:blur(6px); }
+  .btn.secondary:hover{ border-color:var(--ok); color:var(--ok); background:rgba(var(--ok-rgb),0.05); transform:translateY(-1px); }
 
   /* ---------- ICONS ---------- */
   .icon{
     width:17px; height:17px;
     color:var(--ok);
     flex-shrink:0;
-    filter:drop-shadow(0 0 5px rgba(37,99,235,0.35));
+    filter:drop-shadow(0 0 5px rgba(var(--ok-rgb),0.35));
   }
   .icon-lg{ width:22px; height:22px; }
 
   /* ---------- STAT HIGHLIGHT ---------- */
   .stat{ color:var(--ok); font-weight:600; }
-  .stat.teal{ color:var(--build); }
+  .stat.teal{ color:var(--text); font-weight:700; } /* secondary emphasis tier -- neutral, not a second hue */
 
   /* ---------- ARCHITECTURE DIAGRAM ---------- */
   .diagram-caption{
@@ -273,7 +338,7 @@
     border-radius:8px;
     padding:20px;
     overflow-x:auto;
-    box-shadow:0 20px 50px -20px rgba(22,33,58,0.10), inset 0 1px 0 rgba(255,255,255,0.6);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
   }
   .diagram-frame svg{
     display:block;
@@ -297,7 +362,7 @@
     border-radius:8px;
     padding:22px 26px;
     position:relative;
-    box-shadow:0 14px 32px -18px rgba(22,33,58,0.2);
+    box-shadow:0 14px 32px -18px rgba(0,0,0,0.4);
   }
   .diagram-detail.open{ display:block; }
   .diagram-detail-close{
@@ -324,7 +389,7 @@
   .diagram-detail-outcome{
     margin-top:14px; padding-top:14px;
     border-top:1px solid var(--border);
-    font-size:13.5px; font-weight:600; color:var(--build);
+    font-size:13.5px; font-weight:600; color:var(--ok);
     line-height:1.55;
   }
 
@@ -356,12 +421,12 @@
     border:1px solid var(--border);
     border-radius:8px;
     overflow:hidden;
-    box-shadow:0 20px 50px -20px rgba(22,33,58,0.10), inset 0 1px 0 rgba(255,255,255,0.6);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
     transition:border-color .25s ease, box-shadow .25s ease;
   }
   .manifest:hover{
     border-color:var(--ok-dim);
-    box-shadow:0 20px 50px -20px rgba(22,33,58,0.10), 0 0 30px -8px rgba(37,99,235,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.35), 0 0 30px -8px rgba(var(--ok-rgb),0.3), inset 0 1px 0 rgba(255,255,255,0.04);
   }
   .manifest-head{
     padding:14px 22px;
@@ -386,7 +451,7 @@
     border-radius:8px;
     transition:background .2s ease, transform .2s ease;
   }
-  .log-entry:hover{ background:rgba(37,99,235,0.035); transform:translateX(2px); }
+  .log-entry:hover{ background:rgba(var(--ok-rgb),0.035); transform:translateX(2px); }
   .log-entry:first-child{ border-top:none; padding-top:0; margin-top:0; }
   .tag{
     font-family:'IBM Plex Mono', monospace;
@@ -395,7 +460,7 @@
   }
   .tag .head{
     display:inline-block;
-    background:rgba(37,99,235,0.1);
+    background:rgba(var(--ok-rgb),0.1);
     color:var(--ok);
     border:1px solid var(--ok-dim);
     padding:2px 7px;
@@ -448,7 +513,7 @@
   }
   .stack-group:hover{
     background:var(--panel);
-    box-shadow:inset 0 0 0 1px rgba(37,99,235,0.15);
+    box-shadow:inset 0 0 0 1px rgba(var(--ok-rgb),0.15);
     transform:translateY(-2px);
   }
   .stack-group h3{
@@ -474,7 +539,7 @@
   .tags span:hover{
     border-color:var(--ok);
     color:var(--ok);
-    box-shadow:0 0 12px -2px rgba(37,99,235,0.4);
+    box-shadow:0 0 12px -2px rgba(var(--ok-rgb),0.4);
     transform:translateY(-1px);
   }
 
@@ -485,28 +550,26 @@
     gap:20px;
   }
   .project-card{
-    background:#FFFFFF;
+    background:var(--panel);
     border:1px solid var(--border);
     border-radius:10px;
     padding:24px;
     display:flex; flex-direction:column; gap:12px;
-    box-shadow:0 1px 2px rgba(22,33,58,0.04);
+    box-shadow:0 1px 2px rgba(0,0,0,0.25);
     transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
   }
   .project-card:hover{
     transform:translateY(-3px);
     border-color:var(--ok-dim);
-    box-shadow:0 14px 32px -18px rgba(22,33,58,0.22);
+    box-shadow:0 14px 32px -18px rgba(0,0,0,0.45);
   }
   .project-card .p-icon{
     width:40px; height:40px;
     border-radius:9px;
     display:flex; align-items:center; justify-content:center;
-    background:rgba(37,99,235,0.08);
+    background:rgba(var(--ok-rgb),0.08);
   }
   .project-card .p-icon svg{ width:20px; height:20px; color:var(--ok); }
-  .project-card.teal .p-icon{ background:rgba(13,148,136,0.1); }
-  .project-card.teal .p-icon svg{ color:var(--build); }
   .project-card h3{
     font-family:'IBM Plex Sans', sans-serif;
     font-size:20px;
@@ -533,7 +596,6 @@
     font-weight:600;
     line-height:1.5;
   }
-  .project-card.teal .p-outcome{ color:var(--build); }
   .project-card .p-note{ font-size:11.5px; color:var(--text-faint); font-style:italic; }
 
   /* ---------- EDUCATION ---------- */
@@ -561,7 +623,7 @@
     border:1px solid var(--border);
     border-radius:8px;
     padding:28px 30px;
-    box-shadow:0 20px 60px -25px rgba(22,33,58,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+    box-shadow:0 20px 60px -25px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
   }
   .terminal .prompt{
     font-family:'IBM Plex Mono', monospace;
@@ -579,7 +641,7 @@
     border-radius:var(--radius);
     transition:border-color .15s ease, box-shadow .2s ease, transform .15s ease;
   }
-  .contact-links a:hover{ border-color:var(--ok); color:var(--ok); box-shadow:0 0 16px -3px rgba(37,99,235,0.45); transform:translateY(-1px); }
+  .contact-links a:hover{ border-color:var(--ok); color:var(--ok); box-shadow:0 0 16px -3px rgba(var(--ok-rgb),0.45); transform:translateY(-1px); }
   .foot-note{
     font-family:'IBM Plex Mono', monospace;
     font-size:11.5px;
@@ -620,6 +682,14 @@
     .diagram-desktop{ display:none; }
     .diagram-mobile{ display:block; width:100%; min-width:0; height:auto; }
     .diagram-caption{ font-size:13.5px; }
+  }
+
+  @media (max-width:480px){
+    .status-pill{ padding:6px 9px; }
+    .status-pill .status-label{ display:none; }
+    .theme-btn{ padding:6px; }
+    .theme-btn-label{ display:none; }
+    .nav-right{ gap:8px; }
   }
 
   @media (max-width:380px){
@@ -708,7 +778,23 @@
         <a href="#education">education</a>
         <a href="#contact">contact</a>
       </div>
-      <div class="status-pill"><span class="dot"></span>open to work</div>
+      <div class="nav-right">
+        <div class="theme-picker">
+          <button class="theme-btn" id="themeBtn" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="theme-swatch"></span>
+            <span class="theme-btn-label">🎨 Theme</span>
+          </button>
+          <div class="theme-menu" id="themeMenu" role="menu">
+            <button class="theme-option" type="button" data-theme="azure" role="menuitem"><span class="theme-swatch" style="background:#3B82F6"></span>Azure</button>
+            <button class="theme-option" type="button" data-theme="indigo" role="menuitem"><span class="theme-swatch" style="background:#818CF8"></span>Indigo</button>
+            <button class="theme-option" type="button" data-theme="emerald" role="menuitem"><span class="theme-swatch" style="background:#34D399"></span>Emerald</button>
+            <button class="theme-option" type="button" data-theme="cyan" role="menuitem"><span class="theme-swatch" style="background:#22D3EE"></span>Cyan</button>
+            <button class="theme-option" type="button" data-theme="amber" role="menuitem"><span class="theme-swatch" style="background:#FBBF24"></span>Amber</button>
+            <button class="theme-option" type="button" data-theme="rose" role="menuitem"><span class="theme-swatch" style="background:#FB7185"></span>Rose</button>
+          </div>
+        </div>
+        <div class="status-pill"><span class="dot"></span><span class="status-label">open to work</span></div>
+      </div>
     </nav>
   </div>
 </header>
@@ -784,7 +870,7 @@
           .dnode{ cursor:pointer; outline:none; }
           .dnode:hover .dbox, .dnode:hover .dbox-accent{ stroke:var(--ok); stroke-width:2; }
           .dnode:focus-visible .dbox, .dnode:focus-visible .dbox-accent{ stroke:var(--ok); stroke-width:2.5; }
-          .dnode.active .dbox, .dnode.active .dbox-accent{ fill:rgba(37,99,235,0.07); stroke:var(--ok); stroke-width:2.5; }
+          .dnode.active .dbox, .dnode.active .dbox-accent{ fill:rgba(var(--ok-rgb),0.07); stroke:var(--ok); stroke-width:2.5; }
         </style>
 
         <!-- Row 0: GitHub repos -> PR review agent -->
@@ -992,7 +1078,7 @@
         <div class="p-note">Internal Innovid tooling — no public repo</div>
       </div>
 
-      <div class="project-card teal">
+      <div class="project-card">
         <div class="p-icon"><svg><use href="#icon-flow"/></svg></div>
         <h3>EKS/Terraform Platform Rebuild</h3>
         <p class="p-desc">Rewrote a shared EKS Terraform module into reusable, per-environment modules to eliminate config drift across dev, staging, and prod.</p>
@@ -1276,6 +1362,49 @@
     });
 
     closeBtn.addEventListener('click', closePanel);
+  })();
+
+  // Accent theme picker -- persisted, no-JS-safe (azure default already set via :root)
+  (function(){
+    var THEMES = ['azure', 'indigo', 'emerald', 'cyan', 'amber', 'rose'];
+    var root = document.documentElement;
+    var btn = document.getElementById('themeBtn');
+    var menu = document.getElementById('themeMenu');
+    var options = document.querySelectorAll('.theme-option');
+    if(!btn || !menu || !options.length) return;
+
+    function applyTheme(name){
+      if(THEMES.indexOf(name) === -1) name = 'azure';
+      root.setAttribute('data-accent', name);
+      try { localStorage.setItem('accent', name); } catch(e){ /* storage unavailable, theme just won't persist */ }
+      options.forEach(function(opt){
+        opt.classList.toggle('active', opt.getAttribute('data-theme') === name);
+      });
+    }
+
+    var stored = null;
+    try { stored = localStorage.getItem('accent'); } catch(e){}
+    applyTheme(stored || 'azure');
+
+    function closeMenu(){ menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+    function openMenu(){ menu.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      if(menu.classList.contains('open')) closeMenu(); else openMenu();
+    });
+    document.addEventListener('click', function(e){
+      if(!menu.contains(e.target) && e.target !== btn) closeMenu();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeMenu();
+    });
+    options.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        applyTheme(opt.getAttribute('data-theme'));
+        closeMenu();
+      });
+    });
   })();
 </script>
 
